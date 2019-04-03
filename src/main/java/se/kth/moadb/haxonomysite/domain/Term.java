@@ -14,7 +14,7 @@ public class Term {
     private String name;
 
     @ManyToOne
-    private Term broader_term;
+    private Term broaderTerm;
 
 
     @ManyToMany(mappedBy = "term")
