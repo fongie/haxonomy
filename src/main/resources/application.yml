@@ -7,3 +7,27 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop #should be none in production
+---
+spring:
+  profiles: heroku
+  server:
+    port: ${PORT}
+  datasource:
+    url: ${CLEARDB_DATABASE_URL}&useLegacyDatetimeCode=false&characterEncoding=UTF-8
+    username: ${CLEARDB_USER}
+    password: ${CLEARDB_PASSWORD}
+    platform: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update
+---
+spring:
+  profiles: travis
+  datasource:
+    url: jdbc:mysql://localhost:3306/recruit?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    username: root
+    password: ''
+    platform: mysql
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
