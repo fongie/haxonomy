@@ -4,3 +4,4 @@ dispatch.iml
 target/
 !.gitignore
 !.travis.yml
+!.mvn
