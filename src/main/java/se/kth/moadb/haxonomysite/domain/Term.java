@@ -9,15 +9,14 @@ import java.util.Collection;
 @Data
 public class Term {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 
     @ManyToOne
     private Term broaderTerm;
 
-
-    @ManyToMany(mappedBy = "term")
+    @ManyToMany(mappedBy = "terms")
     Collection<Report> reports;
 
 }

@@ -9,11 +9,11 @@ import java.util.Collection;
 @Data
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String url;
     private String title;
 
     @ManyToMany
-    Collection<Term> term;
+    Collection<Term> terms;
 }
