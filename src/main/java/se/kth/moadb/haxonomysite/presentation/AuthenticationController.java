@@ -1,12 +1,9 @@
-package se.moadb.recruitserver.presentation;
+package se.kth.moadb.haxonomysite.presentation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import se.moadb.recruitserver.application.PersonService;
-import se.moadb.recruitserver.application.SecurityService;
-import se.moadb.recruitserver.domain.Person;
-import se.moadb.recruitserver.domain.User;
+import se.kth.moadb.haxonomysite.application.SecurityService;
+import se.kth.moadb.haxonomysite.domain.User;
 
 import java.security.Principal;
 
@@ -21,8 +18,10 @@ public class AuthenticationController {
     @Autowired
     SecurityService securityService;
 
+    /*
     @Autowired
     PersonService personService;
+    */
 
     /**
      * Register a new user and person.
@@ -37,11 +36,13 @@ public class AuthenticationController {
      *    username : String,
      * }
      */
+    /*
     @PostMapping("/registration")
     public Person registerUserAndPerson(@RequestBody RegistrationPostRequest registrationPostRequest) {
         Person person = personService.savePersonAndUser(registrationPostRequest);
         return person;
     }
+    */
 
     /**
      * Redirected to on successful login

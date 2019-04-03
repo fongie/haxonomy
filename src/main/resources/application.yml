@@ -6,7 +6,10 @@ spring:
     platform: mysql
   jpa:
     hibernate:
-      ddl-auto: create-drop #should be none in production
+      ddl-auto: update #should be none in production
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 ---
 spring:
   profiles: heroku
