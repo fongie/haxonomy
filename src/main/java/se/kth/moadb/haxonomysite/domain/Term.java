@@ -7,6 +7,11 @@ import java.util.Collection;
 
 @Entity
 @Data
+@Table(
+      uniqueConstraints = {
+            @UniqueConstraint(columnNames = {"name", "broader_term_id"})
+      }
+)
 public class Term {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

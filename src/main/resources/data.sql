@@ -43,7 +43,7 @@ VALUES
 INSERT INTO term(name, broader_term_id)
 VALUES
 ('cloud services', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server')),
-('operation system', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server')),
+('operating system', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server')),
 ('server software', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server')),
 ('database', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server')),
 ('server techniques', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server')),

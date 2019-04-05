@@ -7,7 +7,7 @@ spring:
     initialization-mode: always
   jpa:
     hibernate:
-      ddl-auto: create #should be none in production
+      ddl-auto: none #should be none in production
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
