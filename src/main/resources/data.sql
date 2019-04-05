@@ -1,4 +1,5 @@
-INSERT INTO term(id, name) VALUES(1,'attack surfaces');
+INSERT INTO term(id, name) VALUES (1,'attack surfaces')
+ON DUPLICATE KEY UPDATE;
 
 -- Top terms
 INSERT INTO term(name, broader_term_id)
