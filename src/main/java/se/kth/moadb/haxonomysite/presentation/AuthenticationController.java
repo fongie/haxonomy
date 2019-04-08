@@ -27,13 +27,8 @@ public class AuthenticationController {
      * Register a new user and person.
      * JSON data should be structured as follows:
      * {
-     *    dateOfBirth : String,
      *    email : String,
-     *    firstName : String,
-     *    lastName : String,
      *    password : String,
-     *    role : String,
-     *    username : String,
      * }
      */
     /*
