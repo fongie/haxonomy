@@ -1,6 +1,11 @@
 INSERT IGNORE INTO term(id, name) VALUES (1,'attack surfaces')
 ON DUPLICATE KEY UPDATE id=id;
 
+-- Roles
+INSERT INTO role(name)
+VALUES
+('taxonomist');
+
 -- Top terms
 INSERT INTO term(name, broader_term_id)
 VALUES

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `user_roles`;
+DROP TABLE IF EXISTS `user_role`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `report_terms`;
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS role (
     name VARCHAR(255) PRIMARY KEY
 );
 
-CREATE TABLE IF NOT EXISTS user_roles (
+CREATE TABLE IF NOT EXISTS user_role (
     user_id INTEGER,
     role_name VARCHAR(255),
 

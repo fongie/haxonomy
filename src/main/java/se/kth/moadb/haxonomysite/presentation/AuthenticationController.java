@@ -18,31 +18,20 @@ public class AuthenticationController {
     @Autowired
     SecurityService securityService;
 
-    /*
-    @Autowired
-    PersonService personService;
-    */
 
     /**
      * Register a new user and person.
      * JSON data should be structured as follows:
      * {
-     *    dateOfBirth : String,
      *    email : String,
-     *    firstName : String,
-     *    lastName : String,
      *    password : String,
-     *    role : String,
-     *    username : String,
      * }
      */
-    /*
     @PostMapping("/registration")
-    public Person registerUserAndPerson(@RequestBody RegistrationPostRequest registrationPostRequest) {
-        Person person = personService.savePersonAndUser(registrationPostRequest);
-        return person;
+    public User registerUserAndPerson(@RequestBody RegistrationPostRequest registrationPostRequest) {
+        return securityService.saveUser(registrationPostRequest.getEmail(), registrationPostRequest.getPassword(), "taxonomist");
     }
-    */
+
 
     /**
      * Redirected to on successful login
