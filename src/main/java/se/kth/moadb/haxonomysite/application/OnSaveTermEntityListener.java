@@ -8,7 +8,8 @@ import se.kth.moadb.haxonomysite.domain.Term;
 import se.kth.moadb.haxonomysite.repository.ReportRepository;
 import se.kth.moadb.haxonomysite.repository.TermRepository;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Component
 public class OnSaveTermEntityListener extends AbstractRepositoryEventListener<Report> {
@@ -17,13 +18,28 @@ public class OnSaveTermEntityListener extends AbstractRepositoryEventListener<Re
     @Autowired
     ReportRepository reportRepository;
 
+    /** Add all broader terms to the report as well
+     *
+     * @param report
+     */
     @Override
     protected void onAfterCreate(Report report) {
-        System.err.println("OMG SAVED REPORT " + report.getId());
-        Optional<Term> term = termRepository.findById((long) 100);
-
-        report.getTerms().add(term.get());
+        Collection<Term> broaderTerms = new ArrayList<>();
+        report.getTerms().forEach(
+                term -> addBroaderTerms(broaderTerms, term)
+        );
+        broaderTerms.stream()
+                .filter(term -> !report.getTerms().contains(term))
+                .forEach(report.getTerms()::add);
 
         reportRepository.save(report);
+    }
+
+    private void addBroaderTerms(Collection<Term> collection, Term term) {
+        if (term.getBroaderTerm() == null) {
+            return;
+        }
+        collection.add(term.getBroaderTerm());
+        addBroaderTerms(collection, term.getBroaderTerm());
     }
 }
