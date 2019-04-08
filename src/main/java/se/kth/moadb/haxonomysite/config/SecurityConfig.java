@@ -3,6 +3,7 @@ package se.kth.moadb.haxonomysite.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,11 +52,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/registration").permitAll()
-                .antMatchers("/statuses").hasAuthority("recruit")
-                .antMatchers("/applications").hasAuthority("applicant")
-                .antMatchers("/applications/filter").hasAuthority("recruit")
-                .antMatchers("/competences").hasAnyAuthority("recruit", "applicant")
+                .antMatchers(HttpMethod.GET, "/terms").permitAll()
+                .antMatchers(HttpMethod.GET, "/reports").permitAll()
+                .antMatchers(HttpMethod.POST, "/registration").permitAll()
+                .antMatchers(HttpMethod.POST, "/perform_login").permitAll()
+                .antMatchers(HttpMethod.GET, "/login/success").permitAll()
+                .antMatchers(HttpMethod.POST, "/perform_logout").permitAll()
+                .antMatchers(HttpMethod.POST, "/terms").hasAuthority("taxonomist")
+                .antMatchers(HttpMethod.POST, "/reports").hasAuthority("taxonomist")
                 .and()
                 .formLogin()
                 .usernameParameter("username")

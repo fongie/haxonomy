@@ -18,10 +18,6 @@ public class AuthenticationController {
     @Autowired
     SecurityService securityService;
 
-    /*
-    @Autowired
-    PersonService personService;
-    */
 
     /**
      * Register a new user and person.
@@ -33,7 +29,7 @@ public class AuthenticationController {
      */
     @PostMapping("/registration")
     public User registerUserAndPerson(@RequestBody RegistrationPostRequest registrationPostRequest) {
-        return securityService.saveUser(registrationPostRequest.getEmail(), registrationPostRequest.getPassword(), Role );
+        return securityService.saveUser(registrationPostRequest.getEmail(), registrationPostRequest.getPassword(), "taxonomist");
     }
 
 

@@ -15,7 +15,7 @@ import java.util.Collection;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType. IDENTITY)
     private Long id;
 
     @NotNull
@@ -28,7 +28,7 @@ public class User implements UserDetails {
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Collection<Role> roles;
+    private Collection<Role> role;
 
     public User() {
     }
@@ -36,16 +36,16 @@ public class User implements UserDetails {
     public User(@NotNull String username, @NotNull String password, Collection<Role> roles) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.role = roles;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public Collection<Role> getRole() {
+        return role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return role;
     }
 
     @Override
