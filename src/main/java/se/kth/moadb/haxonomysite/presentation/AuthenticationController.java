@@ -31,13 +31,11 @@ public class AuthenticationController {
      *    password : String,
      * }
      */
-    /*
     @PostMapping("/registration")
-    public Person registerUserAndPerson(@RequestBody RegistrationPostRequest registrationPostRequest) {
-        Person person = personService.savePersonAndUser(registrationPostRequest);
-        return person;
+    public User registerUserAndPerson(@RequestBody RegistrationPostRequest registrationPostRequest) {
+        return securityService.saveUser(registrationPostRequest.getEmail(), registrationPostRequest.getPassword(), Role );
     }
-    */
+
 
     /**
      * Redirected to on successful login
