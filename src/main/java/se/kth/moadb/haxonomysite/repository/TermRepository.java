@@ -6,4 +6,6 @@ import se.kth.moadb.haxonomysite.domain.Term;
 
 @RepositoryRestResource(path = "terms")
 public interface TermRepository extends PagingAndSortingRepository<Term, Long> {
+
+    //TODO dont expose delete, put, etc.
 }
