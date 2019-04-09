@@ -18,11 +18,13 @@ public class TreeController {
     private TermRepository termRepository;
 
     @GetMapping("/tree")
-    public TreeNode getTermTree() {
+    public Collection<TreeNode> getTermTree() {
         Collection<Term> allTerms = new ArrayList<>();
         termRepository.findAll().forEach(allTerms::add);
         TreeNode tree = buildTree(allTerms);
-        return tree;
+        Collection<TreeNode> list = new ArrayList<>();
+        list.add(tree); //app wants it wrapped in a list
+        return list;
     }
     private TreeNode buildTree(Collection<Term> terms) {
         Term rootTerm = terms.stream().filter(term -> term.getBroaderTerm() == null).findFirst().get();
