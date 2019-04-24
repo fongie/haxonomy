@@ -1,6 +1,13 @@
 INSERT IGNORE INTO term(id, name) VALUES (1,'attack surfaces')
 ON DUPLICATE KEY UPDATE id=id;
 
+-- Replies
+INSERT INTO reply(name)
+VALUES
+('UNKNOWN'),
+('YES'),
+('NO');
+
 -- Roles
 INSERT INTO role(name)
 VALUES
