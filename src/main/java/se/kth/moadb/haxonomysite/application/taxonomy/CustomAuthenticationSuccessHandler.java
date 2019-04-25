@@ -1,4 +1,4 @@
-package se.kth.moadb.haxonomysite.application;
+package se.kth.moadb.haxonomysite.application.taxonomy;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

@@ -1,4 +1,4 @@
-package se.kth.moadb.haxonomysite.application;
+package se.kth.moadb.haxonomysite.application.tool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,8 @@ public class MarkovStateService {
     ReplyRepository replyRepository;
     @Autowired
     MarkovActionRepository markovActionRepository;
+    @Autowired
+    ActionChoosingAlgorithm actionChoosingAlgorithm;
 
     public MarkovState init() {
 
@@ -46,5 +48,9 @@ public class MarkovStateService {
 
         state = markovStateRepository.save(state);
         return state;
+    }
+
+    public MarkovAction getNextActionForState(long stateId) {
+       return actionChoosingAlgorithm.chooseNextAction(stateId);
     }
 }

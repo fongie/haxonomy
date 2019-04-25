@@ -2,7 +2,7 @@ package se.kth.moadb.haxonomysite.presentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import se.kth.moadb.haxonomysite.application.SecurityService;
+import se.kth.moadb.haxonomysite.application.taxonomy.SecurityService;
 import se.kth.moadb.haxonomysite.domain.User;
 
 import java.security.Principal;
