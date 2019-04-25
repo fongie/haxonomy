@@ -5,8 +5,14 @@ import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
+/**
+ * Just send actions to try randomly
+ */
 @Component
 public class RandomAlgorithm implements ActionChoosingAlgorithm {
    @Autowired
@@ -14,7 +20,13 @@ public class RandomAlgorithm implements ActionChoosingAlgorithm {
 
    @Override
    public MarkovAction chooseNextAction(long markovStateId) {
-      Collection<MarkovAction> actions = markovActionRepository.findAllByMarkovState_Id(markovStateId);
-      return actions.stream().findFirst().get();
+      Collection<MarkovAction> actionCollection = markovActionRepository.findAllByMarkovState_Id(markovStateId);
+      List<MarkovAction> actions = new ArrayList<>();
+      actions.addAll(actionCollection);
+
+      Random rand = new Random();
+      int numActions = actions.size();
+      int actionId = rand.nextInt(numActions);
+      return actions.get(actionId);
    }
 }

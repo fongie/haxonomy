@@ -24,6 +24,9 @@ public class MarkovController {
     //returns the next action (question) to be answered by user
     @GetMapping(value = "/tool/{stateId}/next")
     public MarkovAction getNextAction(@PathVariable long stateId) {
+        //TODO check if state exists, if not, throw exception
+
+        //TODO maybe format the reports better (they are recursively returned)
        return markovStateService.getNextActionForState(stateId);
     }
 }
