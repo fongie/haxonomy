@@ -17,6 +17,7 @@ public class Term {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    private int time;
 
     @ManyToOne
     private Term broaderTerm;
