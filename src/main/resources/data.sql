@@ -6,16 +6,23 @@ INSERT INTO role(name)
 VALUES
 ('taxonomist');
 
--- Top terms
-INSERT INTO term(name, broader_term_id)
+-- Times
+INSERT INTO `time`(`time`)
 VALUES
-('language', 1),
-('source code', 1),
-('user interface', 1),
-('network & communication', 1),
-('server', 1),
-('account security', 1),
-('encryption', 1);
+('5'),
+('60'),
+('360');
+
+-- Top terms
+INSERT INTO term(name, broader_term_id, time_id)
+VALUES
+('language', 1, 1),
+('source code', 1, 2),
+('user interface', 1, 1),
+('network & communication', 1, 1),
+('server', 1, 1),
+('account security', 1, 1),
+('encryption', 1, 3);
 
 -- Language
 INSERT INTO term(name, broader_term_id)

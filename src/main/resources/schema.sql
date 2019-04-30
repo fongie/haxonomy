@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `report_terms`;
 DROP TABLE IF EXISTS `term`;
 DROP TABLE IF EXISTS `report`;
+DROP TABLE IF EXISTS `time`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -26,13 +27,19 @@ CREATE TABLE IF NOT EXISTS user_role (
     FOREIGN KEY (role_name) REFERENCES role(name)
 );
 
+CREATE TABLE IF NOT EXISTS time (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    time INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS term (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    time INTEGER,
+    time_id INTEGER,
     broader_term_id INTEGER,
 
-    FOREIGN KEY(broader_term_id) REFERENCES term(id)
+    FOREIGN KEY(broader_term_id) REFERENCES term(id),
+    FOREIGN KEY(time_id) REFERENCES time(id)
 );
 
 CREATE TABLE IF NOT EXISTS report (
