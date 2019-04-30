@@ -14,8 +14,8 @@ public class MarkovController {
 
     //returns the new state id (that user can later use to log in to where they were?)
     @PostMapping(value = "/tool/init")
-    public MarkovState initState() {
-        return markovStateService.init();
+    public void initState() {
+        markovStateService.init();
     }
 
     //returns the next action (question) to be answered by user
