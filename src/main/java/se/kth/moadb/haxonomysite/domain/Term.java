@@ -19,6 +19,9 @@ public class Term {
     private String name;
 
     @ManyToOne
+    private Time time;
+
+    @ManyToOne
     private Term broaderTerm;
 
     @ManyToMany(mappedBy = "terms")

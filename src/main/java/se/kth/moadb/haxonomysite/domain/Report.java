@@ -13,7 +13,10 @@ public class Report {
     private long id;
     private String url;
     private String title;
+    private int bounty;
+    private String vulnerability;
 
     @ManyToMany
     Collection<Term> terms;
+
 }
