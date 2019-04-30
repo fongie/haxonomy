@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * Just send actions to try randomly
  */
-@Component
+@Component("randomAlgorithm")
 public class RandomAlgorithm implements ActionChoosingAlgorithm {
    @Autowired
    private MarkovActionRepository markovActionRepository;

@@ -1,10 +1,7 @@
 package se.kth.moadb.haxonomysite.presentation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.kth.moadb.haxonomysite.application.tool.MarkovStateService;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;

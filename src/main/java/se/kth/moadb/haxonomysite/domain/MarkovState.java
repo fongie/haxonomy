@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
+@Data
 public class MarkovState {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "markovState")
+    @ManyToMany(mappedBy = "markovState")
     private Collection<MarkovAction> markovActions;
 
     public long getId() {

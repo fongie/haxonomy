@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS `markov_state`;
 DROP TABLE IF EXISTS `reply`;
 DROP TABLE IF EXISTS `term`;
 DROP TABLE IF EXISTS `report`;
+DROP TABLE IF EXISTS `markov_action_markov_state`;
 DROP TABLE IF EXISTS `time`;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -81,3 +82,18 @@ CREATE TABLE IF NOT EXISTS markov_action (
     FOREIGN KEY(markov_state_id) REFERENCES markov_state(id)
 );
 
+CREATE TABLE IF NOT EXISTS markov_action_markov_state (
+    markov_actions_id INTEGER,
+    markov_state_id INTEGER,
+    PRIMARY KEY(markov_actions_id, markov_state_id),
+    FOREIGN KEY(markov_state_id) REFERENCES markov_state(id),
+    FOREIGN KEY(markov_actions_id) REFERENCES markov_action(id)
+
+);
+
+CREATE TABLE IF NOT EXISTS playthrough (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    current_state_id INTEGER,
+
+    FOREIGN KEY(current_state_id) REFERENCES markov_state(id)
+);

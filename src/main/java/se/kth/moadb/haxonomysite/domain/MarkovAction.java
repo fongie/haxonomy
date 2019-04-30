@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +19,7 @@ public class MarkovAction {
     Reply reply;
     @ManyToOne
     Term term;
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    MarkovState markovState;
+
+    @ManyToMany
+    Collection<MarkovState> markovState;
 }
