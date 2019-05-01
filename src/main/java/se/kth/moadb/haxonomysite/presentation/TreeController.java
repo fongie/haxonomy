@@ -26,6 +26,12 @@ public class TreeController {
         list.add(tree); //app wants it wrapped in a list
         return list;
     }
+
+    @GetMapping("/vulnerabilities")
+    public Collection<Term> getVulnerabilities() {
+        return termRepository.findByBroaderTerm(termRepository.findByName("vulnerabilities"));
+    }
+
     private TreeNode buildTree(Collection<Term> terms) {
         Term rootTerm = terms.stream().filter(term -> term.getBroaderTerm() == null).findFirst().get();
         TreeNode root = termToNode(rootTerm);

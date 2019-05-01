@@ -1,5 +1,6 @@
 package se.kth.moadb.haxonomysite.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Term {
     private Term broaderTerm;
 
     @ManyToMany(mappedBy = "terms")
+    @JsonIgnore
     Collection<Report> reports;
 
 }
