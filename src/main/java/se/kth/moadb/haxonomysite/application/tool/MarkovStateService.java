@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import se.kth.moadb.haxonomysite.application.burlap.BasicBehaviour;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;
 import se.kth.moadb.haxonomysite.domain.Reply;
@@ -52,6 +53,7 @@ public class MarkovStateService {
         //generate a data point init to 0
     }
     private void initMarkovStates() {
+       /*
        long numStates = (long) Math.pow(replyRepository.count(), termRepository.count());
        System.err.println(numStates);
        List<List<MarkovAction>> termActions = new ArrayList<>();
@@ -70,6 +72,11 @@ public class MarkovStateService {
           state.setMarkovActions(actions);
           markovStateRepository.save(state);
        }
+        */
+
+       BasicBehaviour basicBehaviour = new BasicBehaviour();
+       basicBehaviour.QLearningExample("hej");
+
     }
    private void initMarkovActions() {
       termRepository.findAll().forEach(

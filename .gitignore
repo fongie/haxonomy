@@ -5,3 +5,4 @@ target/
 !.gitignore
 !.travis.yml
 !.mvn
+out/
