@@ -1,3 +1,7 @@
+INSERT IGNORE INTO term(id, name) VALUES (1,'attack surfaces')
+ON DUPLICATE KEY UPDATE id=id;
+INSERT IGNORE INTO term(id, name) VALUES (2,'Vulnerabilities')
+ON DUPLICATE KEY UPDATE id=id;
 
 -- Roles
 INSERT INTO role(name)
@@ -11,23 +15,18 @@ VALUES
 ('60'),
 ('360');
 
-INSERT IGNORE INTO term(id, name, time_id) VALUES (1,'attack surfaces', 1)
-ON DUPLICATE KEY UPDATE id=id;
-INSERT IGNORE INTO term(id, name, time_id) VALUES (2,'Vulnerabilities', 1)
-ON DUPLICATE KEY UPDATE id=id;
-
 -- Vulnerabilities
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('SQL Injection', 2, 2),
-       ('Cross-Site Scripting (XSS)', 2, 2),
-       ('Insecure Direct Object Reference (IDOR)', 2, 2),
+       ('Cross-Site Scripting', 2, 2),
+       ('Insecure Direct Object Reference', 2, 2),
        ('Open Redirect', 2, 2),
-       ('XML External Entities (XXE)', 2, 2),
-       ('Cross-Site Request Forgery (CSRF)', 2, 2),
-       ('Server-Side Request Forgery (SSRF)', 2, 3),
+       ('XML External Entities', 2, 2),
+       ('Cross-Site Request Forgery', 2, 2),
+       ('Server-Side Request Forgery', 2, 3),
        ('Path Traversal', 2, 2),
-       ('Denial of Service (DoS)', 2, 2),
+       ('Denial of Service', 2, 2),
        ('Violation of Secure Design Principles', 2, 2),
        ('CRLF Injection', 2, 2),
        ('HTMLInjection', 2, 2),
