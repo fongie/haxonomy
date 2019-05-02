@@ -33,7 +33,7 @@ spring:
     username: root
     password: ''
     platform: mysql
-    initialization-mode: never
+    initialization-mode: always
   jpa:
     hibernate:
       ddl-auto: none

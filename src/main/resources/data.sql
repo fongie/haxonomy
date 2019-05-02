@@ -1,7 +1,3 @@
-INSERT IGNORE INTO term(id, name) VALUES (1,'attack surfaces')
-ON DUPLICATE KEY UPDATE id=id;
-INSERT IGNORE INTO term(id, name) VALUES (2,'Vulnerabilities')
-ON DUPLICATE KEY UPDATE id=id;
 
 -- Roles
 INSERT INTO role(name)
@@ -14,6 +10,11 @@ VALUES
 ('5'),
 ('60'),
 ('360');
+
+INSERT IGNORE INTO term(id, name, time_id) VALUES (1,'attack surfaces', 1)
+ON DUPLICATE KEY UPDATE id=id;
+INSERT IGNORE INTO term(id, name, time_id) VALUES (2,'Vulnerabilities', 1)
+ON DUPLICATE KEY UPDATE id=id;
 
 -- Vulnerabilities
 INSERT INTO term(name, broader_term_id, time_id)
