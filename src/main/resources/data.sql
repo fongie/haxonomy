@@ -297,5 +297,3 @@ VALUES
        ('csrf token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
        ('access token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
        ('oauth token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1);
-
-SET FOREIGN_KEY_CHECKS = 1;
