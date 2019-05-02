@@ -58,4 +58,3 @@ CREATE TABLE IF NOT EXISTS report_terms (
     FOREIGN KEY (reports_id) REFERENCES report(id),
     FOREIGN KEY (terms_id) REFERENCES term(id)
 );
-SET FOREIGN_KEY_CHECKS = 1;
