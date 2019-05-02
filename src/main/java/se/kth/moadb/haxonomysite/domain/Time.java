@@ -11,7 +11,6 @@ import javax.persistence.Id;
 @Data
 public class Time {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int time;
 }

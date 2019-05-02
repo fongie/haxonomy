@@ -9,11 +9,11 @@ VALUES
 ('taxonomist');
 
 -- Times
-INSERT INTO `time`(`time`)
+INSERT INTO `time`(`time`, id)
 VALUES
-('5'),
-('60'),
-('360');
+('5', 1),
+('60', 2),
+('360', 3);
 
 -- Vulnerabilities
 INSERT INTO term(name, broader_term_id, time_id)
