@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS `reply`;
 DROP TABLE IF EXISTS `term`;
 DROP TABLE IF EXISTS `report`;
 DROP TABLE IF EXISTS `time`;
+DROP TABLE IF EXISTS `q_value`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -70,14 +71,21 @@ CREATE TABLE IF NOT EXISTS markov_state (
     id INTEGER AUTO_INCREMENT PRIMARY KEY
 );
 
+CREATE TABLE IF NOT EXISTS q_value (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    value FLOAT(5,2)
+);
+
 CREATE TABLE IF NOT EXISTS markov_action (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     reply_name VARCHAR(255),
     term_id INTEGER,
     markov_state_id INTEGER,
+    q_value_id INTEGER,
 
     FOREIGN KEY(reply_name) REFERENCES reply(name),
     FOREIGN KEY(term_id) REFERENCES term(id),
-    FOREIGN KEY(markov_state_id) REFERENCES markov_state(id)
+    FOREIGN KEY(markov_state_id) REFERENCES markov_state(id),
+    FOREIGN KEY(q_value_id) REFERENCES q_value(id)
 );
 

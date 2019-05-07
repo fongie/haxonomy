@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;
+import se.kth.moadb.haxonomysite.domain.QValue;
 import se.kth.moadb.haxonomysite.domain.Reply;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import se.kth.moadb.haxonomysite.repository.MarkovStateRepository;
@@ -40,6 +41,7 @@ public class MarkovStateService {
                     action.setReply(replyRepository.findById(Reply.UNKNOWN).get());
                     action.setTerm(term);
                     action.setMarkovState(finalState);
+                    action.setQValue(new QValue(0));
                     markovActionRepository.save(action);
                     //actions.add(action);
                 }

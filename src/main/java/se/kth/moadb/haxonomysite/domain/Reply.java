@@ -14,4 +14,11 @@ public class Reply {
 
     @Id
     String name;
+
+    public Reply(String name) {
+        this.name = name;
+    }
+
+    public Reply() {
+    }
 }
