@@ -67,13 +67,18 @@ CREATE TABLE IF NOT EXISTS reply (
     name VARCHAR(255) NOT NULL PRIMARY KEY
 );
 
-CREATE TABLE IF NOT EXISTS markov_state (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY
-);
 
 CREATE TABLE IF NOT EXISTS q_value (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     value FLOAT(5,2)
+);
+
+
+CREATE TABLE IF NOT EXISTS markov_state (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+
+    q_value_id INTEGER,
+    FOREIGN KEY(q_value_id) REFERENCES q_value(id)
 );
 
 CREATE TABLE IF NOT EXISTS markov_action (
@@ -81,11 +86,9 @@ CREATE TABLE IF NOT EXISTS markov_action (
     reply_name VARCHAR(255),
     term_id INTEGER,
     markov_state_id INTEGER,
-    q_value_id INTEGER,
 
     FOREIGN KEY(reply_name) REFERENCES reply(name),
     FOREIGN KEY(term_id) REFERENCES term(id),
-    FOREIGN KEY(markov_state_id) REFERENCES markov_state(id),
-    FOREIGN KEY(q_value_id) REFERENCES q_value(id)
+    FOREIGN KEY(markov_state_id) REFERENCES markov_state(id)
 );
 

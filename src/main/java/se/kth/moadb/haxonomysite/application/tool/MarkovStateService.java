@@ -30,6 +30,7 @@ public class MarkovStateService {
     public MarkovState init() {
 
         MarkovState state = new MarkovState();
+        state.setQValue(new QValue(0));
         state = markovStateRepository.save(state);
 
         //Collection<MarkovAction> actions = new ArrayList<>();
@@ -41,7 +42,7 @@ public class MarkovStateService {
                     action.setReply(replyRepository.findById(Reply.UNKNOWN).get());
                     action.setTerm(term);
                     action.setMarkovState(finalState);
-                    action.setQValue(new QValue(0));
+//                    action.setQValue(new QValue(0));
                     markovActionRepository.save(action);
                     //actions.add(action);
                 }
