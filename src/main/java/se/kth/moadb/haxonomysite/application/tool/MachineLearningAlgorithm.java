@@ -5,11 +5,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;
-import se.kth.moadb.haxonomysite.domain.QValue;
-import se.kth.moadb.haxonomysite.domain.Reply;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import se.kth.moadb.haxonomysite.repository.MarkovStateRepository;
-import sun.jvm.hotspot.oops.Mark;
 
 import java.util.*;
 
