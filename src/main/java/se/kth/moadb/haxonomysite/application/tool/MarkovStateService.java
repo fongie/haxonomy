@@ -30,7 +30,7 @@ public class MarkovStateService {
     public MarkovState init() {
 
         MarkovState state = new MarkovState();
-        state.setQValue(new QValue(0));
+        state.setQValue(0);
         state = markovStateRepository.save(state);
 
         //Collection<MarkovAction> actions = new ArrayList<>();

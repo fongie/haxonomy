@@ -1,5 +1,6 @@
 package se.kth.moadb.haxonomysite.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Report {
     private int bounty;
     private String vulnerability;
 
+    @JsonIgnore
     @ManyToMany
     Collection<Term> terms;
 

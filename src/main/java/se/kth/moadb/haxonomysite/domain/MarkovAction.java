@@ -1,5 +1,6 @@
 package se.kth.moadb.haxonomysite.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,8 @@ public class MarkovAction {
     Reply reply;
     @ManyToOne
     Term term;
+
+    @JsonIgnore // TODO should this realy be ignored
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     MarkovState markovState;
 

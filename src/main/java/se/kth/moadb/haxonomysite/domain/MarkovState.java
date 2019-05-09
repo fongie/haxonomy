@@ -19,7 +19,7 @@ public class MarkovState implements Comparable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIgnore // TODO should this realy be ignored, program crashes if not
+    @JsonIgnore // TODO should this realy be ignored
     @OneToMany(mappedBy = "markovState")
     private Collection<MarkovAction> markovActions;
 
@@ -27,13 +27,15 @@ public class MarkovState implements Comparable {
         return id;
     }
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    private QValue qValue;
+//    @JsonIgnore // TODO should this realy be ignored
+//    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+//    private QValue qValue;
+    private double qValue;
 
     @Override
     public int compareTo(Object o) {
         MarkovState compare = (MarkovState)o;
-        if (this.qValue.getValue() > compare.qValue.getValue())
+        if (this.qValue > compare.qValue)
             return 1;
         else
             return 0;

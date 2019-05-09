@@ -1,6 +1,7 @@
 package se.kth.moadb.haxonomysite.application.tool;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
@@ -14,6 +15,7 @@ import java.util.Random;
  * Just send actions to try randomly
  */
 @Component
+@Primary
 public class RandomAlgorithm implements ActionChoosingAlgorithm {
    @Autowired
    private MarkovActionRepository markovActionRepository;
