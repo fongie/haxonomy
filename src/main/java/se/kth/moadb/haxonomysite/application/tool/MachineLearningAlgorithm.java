@@ -26,6 +26,7 @@ import java.util.*;
  * ...Then make all the steps again for the new state
  */
 @Component
+@Primary
 public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 
     private double gamma = 0.8;
@@ -44,23 +45,50 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
     @Override
     public MarkovAction chooseNextAction(long markovStateId) {
 
-        // All states
-//        Collection<MarkovState> stateCollection = markovStateRepository.findAll();
-//        List<MarkovState> states = new ArrayList<>();
-//        states.addAll(stateCollection);
+        // 1) We have the current MarkovState ID in the markovStateId variable
+        // also get the current MarkovState
+        MarkovState currentState = markovStateRepository.findById(markovStateId);
 
-        // All actions that has a reply status UNKNOWN
+        // 2) Now, get all terms in that State that are still unknown (Reply = "UNKNOWN")
         Collection<MarkovAction> actionCollection = markovActionRepository.findAllByMarkovState_IdAndReply_Name(markovStateId, "UNKNOWN");
-        List<MarkovAction> actions = new ArrayList<>();
-        actions.addAll(actionCollection);
+        List<MarkovAction> allUnknownActions = new ArrayList<>();
+        allUnknownActions.addAll(actionCollection);
+
+        // 2) Also get all action, just based on MarkovState ID, disregarding Replies
+        Collection<MarkovAction> collectionOfAllActionsInCurrentState = markovActionRepository.findAllByMarkovState_Id(markovStateId);
+        List<MarkovAction> allActionsInCurrentState = new ArrayList<>();
+        allActionsInCurrentState.addAll(collectionOfAllActionsInCurrentState);
+
+        // 3) Check if there are any (saved) MarkovStates that is one question apart from this State
+        // First get all saved States
+        Collection<MarkovState> stateCollection = markovStateRepository.findAll();
+        List<MarkovState> allMarkovStates = new ArrayList<>();
+        allMarkovStates.addAll(stateCollection);
+        System.out.println(allMarkovStates.size());
+
+        // Now compare the states in this list to our current State
+        for(MarkovState state : allMarkovStates){
+            // Get all actions from this State
+            List<MarkovAction> actions = new ArrayList<>();
+            actions.addAll(state.getMarkovActions());
+
+
+            for (int i=0; i<state.getMarkovActions().size(); i++){
+//                if (state.get)
+            }
+                state.getMarkovActions().stream().equals(currentState.getMarkovActions().stream());
+
+        }
+
+
 
         Random rand = new Random();
-        int numActions = actions.size();
+        int numActions = allUnknownActions.size();
         int actionId = rand.nextInt(numActions);
 
-//        updateQValues(states, stateCollection, actions.get(actionId), actions); // instead of updating Q matrix
+        updateQValues(allMarkovStates, stateCollection, allUnknownActions.get(actionId), allUnknownActions); // instead of updating Q matrix
 
-        return actions.get(actionId);
+        return allUnknownActions.get(actionId);
     }
 
     private void updateQValues(List<MarkovState> states, Collection<MarkovState> stateCollection, MarkovAction currentAction, List<MarkovAction> actions){
@@ -83,4 +111,5 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 //        currentAction.setQValue(new QValue(gamma * maxQValueAction.getQValue().getValue()));
 //        markovActionRepository.save(currentAction);
     }
+
 }

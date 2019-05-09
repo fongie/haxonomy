@@ -6,4 +6,6 @@ import se.kth.moadb.haxonomysite.domain.MarkovState;
 
 @Repository
 public interface MarkovStateRepository extends JpaRepository<MarkovState, Long> {
+
+    MarkovState findById(long markovStateId);
 }

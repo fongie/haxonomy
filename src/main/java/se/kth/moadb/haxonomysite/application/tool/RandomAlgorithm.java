@@ -15,7 +15,6 @@ import java.util.Random;
  * Just send actions to try randomly
  */
 @Component
-@Primary
 public class RandomAlgorithm implements ActionChoosingAlgorithm {
    @Autowired
    private MarkovActionRepository markovActionRepository;
