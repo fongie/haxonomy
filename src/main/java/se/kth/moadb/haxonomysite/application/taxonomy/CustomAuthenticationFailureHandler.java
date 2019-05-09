@@ -1,4 +1,4 @@
-package se.kth.moadb.haxonomysite.application;
+package se.kth.moadb.haxonomysite.application.taxonomy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;

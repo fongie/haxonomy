@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import se.kth.moadb.haxonomysite.application.CustomAuthenticationFailureHandler;
-import se.kth.moadb.haxonomysite.application.CustomAuthenticationSuccessHandler;
-import se.kth.moadb.haxonomysite.application.SecurityService;
+import se.kth.moadb.haxonomysite.application.taxonomy.CustomAuthenticationFailureHandler;
+import se.kth.moadb.haxonomysite.application.taxonomy.CustomAuthenticationSuccessHandler;
+import se.kth.moadb.haxonomysite.application.taxonomy.SecurityService;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -3,6 +3,13 @@ ON DUPLICATE KEY UPDATE id=id;
 INSERT IGNORE INTO term(id, name) VALUES (2,'Vulnerabilities')
 ON DUPLICATE KEY UPDATE id=id;
 
+-- Replies
+INSERT INTO reply(name)
+VALUES
+('UNKNOWN'),
+('YES'),
+('NO');
+
 -- Roles
 INSERT INTO role(name)
 VALUES
@@ -44,6 +51,22 @@ VALUES
        ('server', 1, 1),
        ('account security', 1, 1),
        ('encryption', 1, 3);
+
+-- Made up reports
+INSERT INTO report(title, url, bounty, vulnerability)
+VALUES
+('Made up title 1', 'www.maduptitle1.com', 100, 'sql_injection1'),
+('Made up title 2', 'www.maduptitle2.com', 100, 'sql_injection2'),
+('Made up title 3', 'www.maduptitle3.com', 100, 'sql_injection3'),
+('Made up title 4', 'www.maduptitle4.com', 100, 'sql_injection4');
+
+-- Made up connections between reports and terms
+INSERT INTO report_terms(reports_id, terms_id)
+VALUES
+(1,1),
+(2,2),
+(3,3),
+(4,4);
 
 -- Language
 INSERT INTO term(name, broader_term_id, time_id)

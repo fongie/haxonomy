@@ -1,4 +1,4 @@
-package se.kth.moadb.haxonomysite.application;
+package se.kth.moadb.haxonomysite.application.taxonomy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;

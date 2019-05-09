@@ -1,4 +1,4 @@
-package se.kth.moadb.haxonomysite.application;
+package se.kth.moadb.haxonomysite.application.taxonomy;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
