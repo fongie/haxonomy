@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;
+import se.kth.moadb.haxonomysite.domain.Reply;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import se.kth.moadb.haxonomysite.repository.MarkovStateRepository;
 
@@ -45,6 +46,10 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
         // 1) We have the current MarkovState ID in the markovStateId variable
         // also get the current MarkovState
         MarkovState currentState = markovStateRepository.findById(markovStateId);
+        Collection<MarkovAction> markovActions = currentState.getMarkovActions();
+        List<MarkovAction> listOfCurrentActions = new ArrayList<>();
+        listOfCurrentActions.addAll(markovActions);
+
 
         // 2) Now, get all terms in that State that are still unknown (Reply = "UNKNOWN")
         Collection<MarkovAction> actionCollection = markovActionRepository.findAllByMarkovState_IdAndReply_Name(markovStateId, "UNKNOWN");
@@ -63,18 +68,26 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
         allMarkovStates.addAll(stateCollection);
         System.out.println(allMarkovStates.size());
 
+        // Contains all States that are possible to go to from current State
+        List<MarkovState> candidateStates = new ArrayList<>();
+
         // Now compare the states in this list to our current State
         for(MarkovState state : allMarkovStates){
             // Get all actions from this State
             List<MarkovAction> actions = new ArrayList<>();
             actions.addAll(state.getMarkovActions());
 
-
-            for (int i=0; i<state.getMarkovActions().size(); i++){
-//                if (state.get)
+            int numberOfUnequal = 0;
+            for (int i=0; i<actions.size(); i++){
+                if (!actions.get(i).getReply().equals(listOfCurrentActions.get(i).getReply())){
+                    numberOfUnequal++;
+                }
+                if (numberOfUnequal > 1)
+                    break;
             }
-                state.getMarkovActions().stream().equals(currentState.getMarkovActions().stream());
-
+            if (numberOfUnequal == 1){
+                candidateStates.add(state);
+            }
         }
 
 
