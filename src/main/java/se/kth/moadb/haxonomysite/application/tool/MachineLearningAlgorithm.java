@@ -26,7 +26,6 @@ import java.util.*;
 @Primary
 public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 
-    private double gamma = 0.8;
 
     /* Add values to some terms to see if it works
     * In mysql terminal:
@@ -43,6 +42,10 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
     private List<MarkovState> listOfPossibleStatesToGoTo = new ArrayList<>();
     // Term ID for the term we want to ask about, the Term Reply should be UNKNOWN before answering
     private HashMap<MarkovState, Long> termInState = new HashMap<>();
+    // Epsilon is the threshold value where we want to make a random choice instead of choosing the State with the highest Q value
+    private double epsilon = 20;
+    // Gamma value
+    private double gamma = 0.8;
 
 
     @Override
@@ -85,8 +88,13 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
             //TODO chose a random one
         } else { // search for the State with maximal Q value
             MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
-            maxQValueState.getMarkovActions().stream().filter(termInState.);
 
+            if (maxQValueState.getQValue() < epsilon){
+                //TODO random choice
+            }
+            else {
+
+            }
         }
 
         //
@@ -127,7 +135,7 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
     }
 
 
-    private void updateQValues(List<MarkovState> states, Collection<MarkovState> stateCollection, MarkovAction currentAction, List<MarkovAction> actions){
+    public void updateQValues(List<MarkovState> states, Collection<MarkovState> stateCollection, MarkovAction currentAction, List<MarkovAction> actions){
 
         /**
          * Look through all actions connected to a state and check which of those actions
