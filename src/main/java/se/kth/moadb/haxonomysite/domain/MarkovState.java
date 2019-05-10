@@ -27,9 +27,6 @@ public class MarkovState implements Comparable {
         return id;
     }
 
-//    @JsonIgnore // TODO should this realy be ignored
-//    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-//    private QValue qValue;
     private double qValue;
 
     @Override
