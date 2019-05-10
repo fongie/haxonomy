@@ -4,15 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;
-import se.kth.moadb.haxonomysite.domain.QValue;
 import se.kth.moadb.haxonomysite.domain.Reply;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import se.kth.moadb.haxonomysite.repository.MarkovStateRepository;
 import se.kth.moadb.haxonomysite.repository.ReplyRepository;
 import se.kth.moadb.haxonomysite.repository.TermRepository;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Service
 public class MarkovStateService {

@@ -10,6 +10,7 @@ import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -36,5 +37,16 @@ public class MarkovState implements Comparable {
             return 1;
         else
             return 0;
+    }
+
+    public MarkovState copy() {
+        MarkovState markovCopy = new MarkovState();
+        Collection<MarkovAction> newActions = markovActions.stream()
+              .map(action -> action.copy())
+              .collect(Collectors.toList()
+              );
+        newActions.stream().forEach(a -> a.setMarkovState(markovCopy));
+        markovCopy.setMarkovActions(newActions);
+        return markovCopy;
     }
 }

@@ -24,4 +24,11 @@ public class MarkovAction {
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     MarkovState markovState;
 
+    public MarkovAction copy() {
+        MarkovAction copy = new MarkovAction();
+        copy.setTerm(term);
+        copy.setReply(reply);
+        copy.setMarkovState(markovState);
+        return copy;
+    }
 }
