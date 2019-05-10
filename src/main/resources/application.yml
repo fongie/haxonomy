@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/haxonomy?useLegacyDatetimeCode=false&characterEncoding=UTF-8&createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
-    password: password
+    password: root
     platform: mysql
     initialization-mode: always
   jpa:
@@ -21,7 +21,7 @@ spring:
     username: ${CLEARDB_USER}
     password: ${CLEARDB_PASSWORD}
     platform: mysql
-    initialization-mode: always
+    initialization-mode: never
   jpa:
     hibernate:
       ddl-auto: none
