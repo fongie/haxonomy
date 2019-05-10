@@ -16,7 +16,6 @@ public class Report {
     private String title;
     private int bounty;
 
-    @JsonIgnore
     @ManyToMany
     Collection<Term> terms;
 
