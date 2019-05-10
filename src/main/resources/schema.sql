@@ -51,8 +51,7 @@ CREATE TABLE IF NOT EXISTS report (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     url VARCHAR(255),
-    bounty INTEGER,
-    vulnerability VARCHAR(255)
+    bounty INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS report_terms (
