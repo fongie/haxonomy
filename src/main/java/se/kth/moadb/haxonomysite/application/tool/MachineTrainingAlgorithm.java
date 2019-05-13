@@ -64,15 +64,13 @@ public class MachineTrainingAlgorithm {
             // Get current State and create a list of all Actions/Terms in that State
             MarkovState currentState = markovStateRepository.findById(markovStateId); //TODO markovStateId must be updated each loop
             System.out.println("Current MarkovState: " + currentState.getId());
-            Collection<MarkovAction> markovActions = markovActionRepository.findAllByMarkovState_Id(markovStateId);
-            List<MarkovAction> listOfCurrentActions = new ArrayList<>();
-            listOfCurrentActions.addAll(markovActions);
+            Collection<MarkovAction> markovActions = currentState.getMarkovActions();
+            List<MarkovAction> listOfCurrentActions = new ArrayList<>(markovActions);
             System.out.println("Number of MarkovActions: " + listOfCurrentActions.size());
 
-            // Get all currently saved MarkovStates
+            // Get all saved MarkovStates
             Collection<MarkovState> stateCollection = markovStateRepository.findAll();
-            List<MarkovState> allMarkovStates = new ArrayList<>();
-            allMarkovStates.addAll(stateCollection);
+            List<MarkovState> allMarkovStates = new ArrayList<>(stateCollection);
             System.out.println("Number of saved MarkovStates: " + allMarkovStates.size());
 
 
@@ -86,8 +84,7 @@ public class MachineTrainingAlgorithm {
             for(MarkovState state : allMarkovStates){
                 System.out.println("Markov State Id: " + state.getId());
                 // Get all actions from this State
-                List<MarkovAction> actions = new ArrayList<>();
-                actions.addAll(state.getMarkovActions());
+                List<MarkovAction> actions = new ArrayList<>(state.getMarkovActions());
 
                 int numberOfTermsWidthDifferentStatus = 0;
                 for (int i=0; i<actions.size(); i++){
@@ -101,27 +98,42 @@ public class MachineTrainingAlgorithm {
                     }
                 }
                 if (numberOfTermsWidthDifferentStatus == 1){
+                    System.out.println("Chosen term: " + termStateMap.get(state));
                     listOfPossibleStatesToGoTo.add(state);
+                    System.out.println("Number of different States that we can go to: " + listOfPossibleStatesToGoTo.size() +
+                            "State Id of item 0: " + listOfPossibleStatesToGoTo.get(0).getId());
+
                 }
             }
 
+            System.out.println("Before checking if there are any saved states that we can go to");
             // Make different choices depending if there are states to go to that has Q values or not
             if (listOfPossibleStatesToGoTo.isEmpty()){
+                System.out.println("Should go in here... No matching States");
                 //TODO chose a random one
                 MarkovState nextState = currentState.copy();
-                Collection<MarkovAction> actions = nextState.getMarkovActions();
-                List<MarkovAction> listOfActions = new ArrayList<>(actions);
+                Collection<MarkovAction> nextStateActions = nextState.getMarkovActions();
+                List<MarkovAction> listOfNextStateActions = new ArrayList<>(nextStateActions);
 
-                List<MarkovAction> listOfUnknownActions = new ArrayList<>();
-                for (MarkovAction action : listOfActions){
+                List<MarkovAction> onlyUnknownActions = new ArrayList<>();
+                for (MarkovAction action : listOfNextStateActions){
                     if (action.getReply().getName().equals(Reply.UNKNOWN)){
-                        listOfUnknownActions.add(action);
+                        onlyUnknownActions.add(action);
                     }
                 }
 
                 Random rand = new Random();
-                int actionId = rand.nextInt(listOfUnknownActions.size());
-                listOfUnknownActions.get(actionId).setReply(new Reply(Reply.YES));
+                int randomIndex = rand.nextInt(onlyUnknownActions.size());
+                Long id = onlyUnknownActions.get(randomIndex).getId();
+
+
+                for (MarkovAction action : listOfNextStateActions){
+                    if (action.getId() == id){
+                        action.setReply(new Reply(Reply.YES));
+                    }
+                }
+                nextState.setMarkovActions(listOfNextStateActions);
+                markovStateRepository.save(nextState); // save next State
 
 
             } else { // search for the State with maximal Q value

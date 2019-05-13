@@ -20,6 +20,7 @@ public class MarkovAction {
     @ManyToOne
     Term term;
 
+    @JoinColumn
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     MarkovState markovState;
 
@@ -27,7 +28,8 @@ public class MarkovAction {
         MarkovAction copy = new MarkovAction();
         copy.setTerm(term);
         copy.setReply(reply);
-        copy.setMarkovState(markovState);
+//        copy.setMarkovState(markovState);
         return copy;
     }
+
 }

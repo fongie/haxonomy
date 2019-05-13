@@ -42,10 +42,10 @@ public class MarkovStateService {
                     action.setMarkovState(finalState);
 //                    action.setQValue(new QValue(0));
                     markovActionRepository.save(action);
-                    //actions.add(action);
+//                    actions.add(action);
                 }
         );
-        //state.setMarkovActions(actions);
+        state.setMarkovActions(markovActionRepository.findAllByMarkovState_Id(finalState.getId()));
 
         state = markovStateRepository.save(state);
         return state;

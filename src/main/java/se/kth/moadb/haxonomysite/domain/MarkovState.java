@@ -3,6 +3,8 @@ package se.kth.moadb.haxonomysite.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
@@ -12,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@Data
 @Entity
 public class MarkovState implements Comparable {
 
@@ -21,6 +22,7 @@ public class MarkovState implements Comparable {
     private long id;
 
     @OneToMany(mappedBy = "markovState")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<MarkovAction> markovActions;
 
     public long getId() {
@@ -47,5 +49,22 @@ public class MarkovState implements Comparable {
         newActions.stream().forEach(a -> a.setMarkovState(markovCopy));
         markovCopy.setMarkovActions(newActions);
         return markovCopy;
+    }
+
+
+    public Collection<MarkovAction> getMarkovActions() {
+        return markovActions;
+    }
+
+    public void setMarkovActions(Collection<MarkovAction> markovActions) {
+        this.markovActions = markovActions;
+    }
+
+    public double getQValue() {
+        return qValue;
+    }
+
+    public void setQValue(double qValue) {
+        this.qValue = qValue;
     }
 }
