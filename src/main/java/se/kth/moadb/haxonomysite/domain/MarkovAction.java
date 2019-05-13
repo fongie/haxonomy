@@ -20,7 +20,6 @@ public class MarkovAction {
     @ManyToOne
     Term term;
 
-    @JsonIgnore // TODO should this realy be ignored
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     MarkovState markovState;
 

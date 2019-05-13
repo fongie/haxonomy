@@ -20,7 +20,6 @@ public class MarkovState implements Comparable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIgnore // TODO should this realy be ignored
     @OneToMany(mappedBy = "markovState")
     private Collection<MarkovAction> markovActions;
 

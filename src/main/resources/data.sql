@@ -304,3 +304,25 @@ VALUES
        ('csrf token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
        ('access token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
        ('oauth token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1);
+
+-- Reports
+INSERT INTO report(url, title, bounty)
+VALUES
+       ('www.report1.com', 'SQL Injection', 100),
+       ('www.report2.com', 'Cross-Site Scripting (XSS)', 100),
+       ('www.report3.com', 'Insecure Direct Object Reference (IDOR)', 100),
+       ('www.report4.com', 'Open Redirect', 100),
+       ('www.report5.com', 'XML External Entities (XXE)', 100),
+       ('www.report6.com', 'Cross-Site Request Forgery (CSRF)', 100);
+
+-- ReportTerms
+INSERT INTO report_terms(reports_id, terms_id)
+VALUES
+       (1,3),
+       (1,4),
+       (2,5),
+       (2,6),
+       (2,7),
+       (3,4),
+       (3,5),
+       (3,6);

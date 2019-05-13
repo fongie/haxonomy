@@ -29,4 +29,11 @@ public class MarkovController {
         //TODO maybe format the reports better (they are recursively returned)
        return markovStateService.getNextActionForState(stateId);
     }
+
+    @PostMapping(value = "tool/learn")
+    public String  runMachineTrainingAlgorithm(){
+        String returnMessage = "I'm feeling smarter by the second. More. Mooooore!";
+        markovStateService.startTraining();
+        return returnMessage;
+    }
 }

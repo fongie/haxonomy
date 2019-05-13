@@ -22,6 +22,8 @@ public class MarkovStateService {
     MarkovActionRepository markovActionRepository;
     @Autowired
     ActionChoosingAlgorithm actionChoosingAlgorithm;
+    @Autowired
+    MachineTrainingAlgorithm machineTrainingAlgorithm;
 
     public MarkovState init() {
 
@@ -51,5 +53,9 @@ public class MarkovStateService {
 
     public MarkovAction getNextActionForState(long stateId) {
        return actionChoosingAlgorithm.chooseNextAction(stateId);
+    }
+
+    public void startTraining(){
+        machineTrainingAlgorithm.trainingAlgorithm();
     }
 }

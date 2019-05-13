@@ -2,10 +2,7 @@ package se.kth.moadb.haxonomysite.application.tool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.kth.moadb.haxonomysite.domain.MarkovAction;
-import se.kth.moadb.haxonomysite.domain.MarkovState;
-import se.kth.moadb.haxonomysite.domain.Report;
-import se.kth.moadb.haxonomysite.domain.Term;
+import se.kth.moadb.haxonomysite.domain.*;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import se.kth.moadb.haxonomysite.repository.MarkovStateRepository;
 import se.kth.moadb.haxonomysite.repository.ReportRepository;
@@ -31,52 +28,52 @@ public class MachineTrainingAlgorithm {
 
     @Autowired
     MarkovActionRepository markovActionRepository;
-
     @Autowired
     MarkovStateRepository markovStateRepository;
-
+    @Autowired
+    MarkovStateService markovStateService;
     @Autowired
     ReportRepository reportRepository;
-
     @Autowired
     TermRepository termRepository;
-
-
-    // Gamma value decides how big a reward should be in regard to the reward in the next State
-    private double gamma = 0.8;
-    // Epsilon is the threshold value where we want to make a random choice instead of choosing the State with the highest Q value
-    private double epsilon = 20;
-    // Initial MarkovStateId
-    private long markovStateId = 1;
-    // List of all Reports that we want to train with
-    private List<Report> listOfReports;
 
 
     /**
      * Finds all available reports and starts training
      */
-    public MachineTrainingAlgorithm() {
-        listOfReports = reportRepository.findAll();
-        trainingAlgorithm(); // then trains (updates Q values and saved MarkovStates)
-    }
+    public void trainingAlgorithm(){
 
+        markovStateService.init();
 
-    private void trainingAlgorithm(){
+        System.out.println("Beginning training...");
+
+        // List of all Reports that we want to train with
+        List<Report> listOfReports; listOfReports = reportRepository.findAll();
+        // Gamma value decides how big a reward should be in regard to the reward in the next State
+        double gamma = 0.8;
+        // Epsilon is the threshold value where we want to make a random choice instead of choosing the State with the highest Q value
+        double epsilon = 20;
+        // Initial MarkovStateId
+        long markovStateId = 1;
+
 
         // Loop through all Reports
         for (Report report : listOfReports){
+            System.out.println("Number of reports: " + listOfReports.size());
 
             // Get current State and create a list of all Actions/Terms in that State
             MarkovState currentState = markovStateRepository.findById(markovStateId); //TODO markovStateId must be updated each loop
-            Collection<MarkovAction> markovActions = currentState.getMarkovActions();
+            System.out.println("Current MarkovState: " + currentState.getId());
+            Collection<MarkovAction> markovActions = markovActionRepository.findAllByMarkovState_Id(markovStateId);
             List<MarkovAction> listOfCurrentActions = new ArrayList<>();
             listOfCurrentActions.addAll(markovActions);
+            System.out.println("Number of MarkovActions: " + listOfCurrentActions.size());
 
             // Get all currently saved MarkovStates
             Collection<MarkovState> stateCollection = markovStateRepository.findAll();
             List<MarkovState> allMarkovStates = new ArrayList<>();
             allMarkovStates.addAll(stateCollection);
-            System.out.println(allMarkovStates.size());
+            System.out.println("Number of saved MarkovStates: " + allMarkovStates.size());
 
 
             // This is the list that will contain all States that are possible to go to from current State
@@ -87,6 +84,7 @@ public class MachineTrainingAlgorithm {
             // Checks if there are any states that we can go to that we been to before and therefore may have a Q value
             // Compare the states in this list to our current State
             for(MarkovState state : allMarkovStates){
+                System.out.println("Markov State Id: " + state.getId());
                 // Get all actions from this State
                 List<MarkovAction> actions = new ArrayList<>();
                 actions.addAll(state.getMarkovActions());
@@ -110,6 +108,21 @@ public class MachineTrainingAlgorithm {
             // Make different choices depending if there are states to go to that has Q values or not
             if (listOfPossibleStatesToGoTo.isEmpty()){
                 //TODO chose a random one
+                MarkovState nextState = currentState.copy();
+                Collection<MarkovAction> actions = nextState.getMarkovActions();
+                List<MarkovAction> listOfActions = new ArrayList<>(actions);
+
+                List<MarkovAction> listOfUnknownActions = new ArrayList<>();
+                for (MarkovAction action : listOfActions){
+                    if (action.getReply().getName().equals(Reply.UNKNOWN)){
+                        listOfUnknownActions.add(action);
+                    }
+                }
+
+                Random rand = new Random();
+                int actionId = rand.nextInt(listOfUnknownActions.size());
+                listOfUnknownActions.get(actionId).setReply(new Reply(Reply.YES));
+
 
             } else { // search for the State with maximal Q value
                 MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
