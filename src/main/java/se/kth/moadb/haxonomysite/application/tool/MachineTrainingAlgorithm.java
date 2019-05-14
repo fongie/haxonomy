@@ -39,6 +39,7 @@ public class MachineTrainingAlgorithm {
 
     private static final int WINVALUE = 100;
     private static final double GAMMA = 0.8;
+    private static final double LEARNING_RATE = 0.1;
 
     private void updateQValues(Deque<MarkovState> path) {
         MarkovState state = path.removeFirst();
@@ -48,10 +49,18 @@ public class MachineTrainingAlgorithm {
 
         while (!path.isEmpty()) {
             state = path.removeFirst();
-            currentQ = currentQ * GAMMA;
+            double previousQ = state.getQValue();
+            currentQ = computeQ(previousQ,currentQ);
+
+
             state.setQValue(currentQ);
             markovStateRepository.save(state);
         }
+    }
+
+    private double computeQ(double previousQ, double currentQ) {
+        double q = (1-LEARNING_RATE) * previousQ + LEARNING_RATE * GAMMA * currentQ;
+        return q;
     }
 
     /**
