@@ -42,17 +42,55 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
     @Override
     public MarkovAction chooseNextAction(long markovStateId) {
 
-        // All terms in this State that are still unknown (Reply = "UNKNOWN")
-        Collection<MarkovAction> actionCollection = markovActionRepository.findAllByMarkovState_IdAndReply_Name(markovStateId, "UNKNOWN");
-        List<MarkovAction> allUnknownActions = new ArrayList<>();
-        allUnknownActions.addAll(actionCollection);
+        System.out.println("MarkovState Id: " + markovStateId);
 
-        Random rand = new Random();
-        int numActions = allUnknownActions.size();
-        int actionId = rand.nextInt(numActions);
+        MarkovState currentState = markovStateRepository.findById(markovStateId);
+        List<MarkovAction> listOfCurrentActions = new ArrayList<>(currentState.getMarkovActions());
 
-        return allUnknownActions.get(actionId);
+//        System.out.println("Current Markov State:" + currentState.getId());
+//        System.out.println("Size of list of current Markov Actions:" + listOfCurrentActions.size());
+
+        Collection<MarkovState> stateCollection = markovStateRepository.findAll();
+        List<MarkovState> allMarkovStates = new ArrayList<>(stateCollection);
+
+//        System.out.println("Number of MarkovStates in Database: " + allMarkovStates.size());
+
+        List<MarkovState> listOfPossibleStatesToGoTo = new ArrayList<>();
+        HashMap<MarkovState, MarkovAction> stateActionMap = new HashMap<>();
+        HashMap<MarkovState, MarkovAction> possibleStateActions = new HashMap<>();
+
+
+        for (MarkovState state : allMarkovStates) {
+
+            List<MarkovAction> actions = new ArrayList<>(state.getMarkovActions());
+//            System.out.println("Number of actions in this specific State:" + actions.size());
+//            System.out.println("Reply in first action: " + actions.get(147).getReply());
+            System.out.println("Current state in loop: " + state.getId());
+
+            int numberOfTermsWidthDifferentStatus = 0;
+            for (int i = 0; i < actions.size(); i++) {
+                if (!actions.get(i).getReply().equals(listOfCurrentActions.get(i).getReply())) {
+//                    System.out.println("listOfCurrentActions.get(i).getReply(): " + listOfCurrentActions.get(i).getReply());
+//                    System.out.println("actions.get(i).getReply(): " + actions.get(i).getReply());
+                    numberOfTermsWidthDifferentStatus++;
+                    stateActionMap.put(state, actions.get(i)); // update HashTable with relevant State and Term info
+                }
+                if (numberOfTermsWidthDifferentStatus > 1) {
+                    stateActionMap.clear(); // clear if more than one difference
+                    break;
+                }
+            }
+            if (numberOfTermsWidthDifferentStatus == 1) {
+                System.out.println(state.getQValue());
+                listOfPossibleStatesToGoTo.add(state);
+                possibleStateActions.put(state, stateActionMap.get(state));
+            }
+        }
+
+        MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
+        System.out.println(maxQValueState.getQValue());
+
+        MarkovAction nextAction = possibleStateActions.get(maxQValueState);
+        return nextAction;
     }
-
-
 }

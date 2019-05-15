@@ -40,6 +40,7 @@ public class MachineTrainingAlgorithm {
     private static final int WINVALUE = 100;
     private static final double GAMMA = 0.8;
     private static final double LEARNING_RATE = 0.1;
+    private boolean win;
 
     private void updateQValues(Deque<MarkovState> path) {
         MarkovState state = path.removeFirst();
@@ -76,108 +77,113 @@ public class MachineTrainingAlgorithm {
         List<Report> listOfReports; listOfReports = reportRepository.findAll();
 
         // Epsilon is the threshold value where we want to make a random choice instead of choosing the State with the highest Q value
-        double epsilon = 20;
+        double epsilon = 2;
 
-        // Loop through all Reports
-        for (Report report : listOfReports){
+        int numberOfRound = 100;
+        for (int round = 0; round<numberOfRound; round++){
+            // Loop through all Reports
+            for (Report report : listOfReports){
 //            System.out.println("Number of reports: " + listOfReports.size());
 
-            Deque<MarkovState> path = new LinkedList<>();
-            long currentStateId = firstState.getId();
+                Deque<MarkovState> path = new LinkedList<>();
+                long currentStateId = firstState.getId();
 
-
-            while (true) {
-                // Get current State and create a list of all Actions/Terms in that State
-                MarkovState currentState = markovStateRepository.findById(currentStateId); //TODO markovStateId must be updated each loop
-                path.addFirst(currentState);
+                win = false;
+                while (!win) {
+                    // Get current State and create a list of all Actions/Terms in that State
+                    MarkovState currentState = markovStateRepository.findById(currentStateId); //TODO markovStateId must be updated each loop
+                    path.addFirst(currentState);
 
 //                System.out.println("Current MarkovState: " + currentState.getId());
-                Collection<MarkovAction> markovActions = currentState.getMarkovActions();
-                List<MarkovAction> listOfCurrentActions = new ArrayList<>(markovActions);
+                    Collection<MarkovAction> markovActions = currentState.getMarkovActions();
+                    List<MarkovAction> listOfCurrentActions = new ArrayList<>(markovActions);
 //                System.out.println("Number of MarkovActions: " + listOfCurrentActions.size());
 
-                // Get all saved MarkovStates
-                Collection<MarkovState> stateCollection = markovStateRepository.findAll();
-                List<MarkovState> allMarkovStates = new ArrayList<>(stateCollection);
+                    // Get all saved MarkovStates
+                    Collection<MarkovState> stateCollection = markovStateRepository.findAll();
+                    List<MarkovState> allMarkovStates = new ArrayList<>(stateCollection);
 //                System.out.println("Number of saved MarkovStates: " + allMarkovStates.size());
 
 
-                // This is the list that will contain all States that are possible to go to from current State
-                List<MarkovState> listOfPossibleStatesToGoTo = new ArrayList<>();
-                // Term ID for the term we want to ask about, the Term Reply should be UNKNOWN before answering
-                HashMap<MarkovState, MarkovAction> stateActionMap = new HashMap<>();
-                HashMap<MarkovState, MarkovAction> possibleStateActions = new HashMap<>();
+                    // This is the list that will contain all States that are possible to go to from current State
+                    List<MarkovState> listOfPossibleStatesToGoTo = new ArrayList<>();
+                    // Term ID for the term we want to ask about, the Term Reply should be UNKNOWN before answering
+                    HashMap<MarkovState, MarkovAction> stateActionMap = new HashMap<>();
+                    HashMap<MarkovState, MarkovAction> possibleStateActions = new HashMap<>();
 
-                // Checks if there are any states that we can go to that we been to before and therefore may have a Q value
-                // Compare the states in this list to our current State
-                for (MarkovState state : allMarkovStates) {
+                    // Checks if there are any states that we can go to that we been to before and therefore may have a Q value
+                    // Compare the states in this list to our current State
+                    for (MarkovState state : allMarkovStates) {
 //                    System.out.println("Markov State Id: " + state.getId());
-                    // Get all actions from this State
-                    List<MarkovAction> actions = new ArrayList<>(state.getMarkovActions());
+                        // Get all actions from this State
+                        List<MarkovAction> actions = new ArrayList<>(state.getMarkovActions());
 
-                    int numberOfTermsWidthDifferentStatus = 0;
-                    for (int i = 0; i < actions.size(); i++) {
-                        if (!actions.get(i).getReply().equals(listOfCurrentActions.get(i).getReply())) {
-                            numberOfTermsWidthDifferentStatus++;
-                            stateActionMap.put(state, actions.get(i)); // update HashTable with relevant State and Term info
+                        int numberOfTermsWidthDifferentStatus = 0;
+                        for (int i = 0; i < actions.size(); i++) {
+                            if (!actions.get(i).getReply().equals(listOfCurrentActions.get(i).getReply())) {
+                                numberOfTermsWidthDifferentStatus++;
+                                stateActionMap.put(state, actions.get(i)); // update HashTable with relevant State and Term info
+                            }
+                            if (numberOfTermsWidthDifferentStatus > 1) {
+                                stateActionMap.clear(); // clear if more than one difference
+                                break;
+                            }
                         }
-                        if (numberOfTermsWidthDifferentStatus > 1) {
-                            stateActionMap.clear(); // clear if more than one difference
-                            break;
-                        }
-                    }
-                    if (numberOfTermsWidthDifferentStatus == 1) {
+                        if (numberOfTermsWidthDifferentStatus == 1) {
 //                        System.out.println("Chosen term: " + stateActionMap.get(state).getTerm().getName());
-                        listOfPossibleStatesToGoTo.add(state);
-                        possibleStateActions.put(state, stateActionMap.get(state));
+                            listOfPossibleStatesToGoTo.add(state);
+                            possibleStateActions.put(state, stateActionMap.get(state));
 //                        System.out.println("Number of different States that we can go to: " + listOfPossibleStatesToGoTo.size() +
 //                                "State Id of item 0: " + listOfPossibleStatesToGoTo.get(0).getId());
 
+                        }
                     }
-                }
 
 //                System.out.println("Before checking if there are any saved states that we can go to");
-                // Make different choices depending if there are states to go to that has Q values or not
-                if (listOfPossibleStatesToGoTo.isEmpty()) {
-                    currentStateId = goToRandomState(report, currentState, path);
-
-                } else { // search for the State with maximal Q value
-                    MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
-
-                    if (maxQValueState.getQValue() < epsilon) {
+                    // Make different choices depending if there are states to go to that has Q values or not
+                    if (listOfPossibleStatesToGoTo.isEmpty()) {
                         currentStateId = goToRandomState(report, currentState, path);
-                    } else {
-                        //if our reports reply matches the one in qmaxvaluestate, go there
-                        if (report.getTerms().contains(possibleStateActions.get(maxQValueState).getTerm())) {
-                            if (markovStateService.isVulnerability(possibleStateActions.get(maxQValueState).getTerm())){
-                                System.out.println("WIN"); //TODO update Q values and so on
-                                updateQValues(path);
-                                break;
-                            }
-                            if (possibleStateActions.get(maxQValueState).getReply().equals(new Reply(Reply.YES))) {
-                                currentStateId = maxQValueState.getId();
-                            } else { //our report was different than qmax, find next state
-                                //if state already exists, use that, otherwise create new
-                                boolean found = false;
-                                Term t = possibleStateActions.get(maxQValueState).getTerm();
-                                Reply r = new Reply(Reply.YES);
-                                for (Map.Entry<MarkovState, MarkovAction> entry : possibleStateActions.entrySet()) {
-                                    MarkovAction a = entry.getValue();
-                                    if (a.getReply().equals(r) && a.getTerm().equals(t)) {
-                                        currentStateId = entry.getKey().getId();
-                                        found = true;
-                                        break;
-                                    }
+
+                    } else { // search for the State with maximal Q value
+                        MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
+
+                        if (maxQValueState.getQValue() < epsilon) {
+                            currentStateId = goToRandomState(report, currentState, path);
+                        } else {
+                            //if our reports reply matches the one in qmaxvaluestate, go there
+                            if (report.getTerms().contains(possibleStateActions.get(maxQValueState).getTerm())) {
+                                MarkovAction maxQAction = possibleStateActions.get(maxQValueState);
+
+                                if (markovStateService.isVulnerability(maxQAction.getTerm()) && maxQAction.getReply().equals(new Reply(Reply.YES))){
+                                    path.addFirst(maxQValueState);
+                                    System.out.println("epsilon WIN" + " from Report: " + report.getTitle()); //TODO update Q values and so on
+                                    updateQValues(path);
+                                    win = true;
                                 }
-                                if (!found) {
-                                    MarkovState copy = currentState.copy();
-                                    copy.getMarkovActions().stream()
-                                            .filter(action -> action.getTerm().equals(possibleStateActions.get(maxQValueState).getTerm()))
-                                            .findFirst()
-                                            .get()
-                                            .setReply(new Reply(Reply.YES));
-                                    copy = markovStateService.saveMarkovState(copy);
-                                    currentStateId = copy.getId();
+                                else if (possibleStateActions.get(maxQValueState).getReply().equals(new Reply(Reply.YES))) {
+                                    currentStateId = maxQValueState.getId();
+                                } else { //our report was different than qmax, find next state
+                                    //if state already exists, use that, otherwise create new
+                                    boolean found = false;
+                                    Term t = possibleStateActions.get(maxQValueState).getTerm();
+                                    Reply r = new Reply(Reply.NO);
+                                    for (Map.Entry<MarkovState, MarkovAction> entry : possibleStateActions.entrySet()) {
+                                        MarkovAction a = entry.getValue();
+                                        if (a.getReply().equals(r) && a.getTerm().equals(t)) {
+                                            currentStateId = entry.getKey().getId();
+                                            found = true;
+                                        }
+                                    }
+                                    if (!found) {
+                                        MarkovState copy = currentState.copy();
+                                        copy.getMarkovActions().stream()
+                                                .filter(action -> action.getTerm().equals(possibleStateActions.get(maxQValueState).getTerm()))
+                                                .findFirst()
+                                                .get()
+                                                .setReply(new Reply(Reply.NO));
+                                        copy = markovStateService.saveMarkovState(copy);
+                                        currentStateId = copy.getId();
+                                    }
                                 }
                             }
                         }
@@ -185,6 +191,8 @@ public class MachineTrainingAlgorithm {
                 }
             }
         }
+
+
     }
 
     private long goToRandomState(Report report, MarkovState currentState, Deque<MarkovState> path) {
@@ -222,9 +230,9 @@ public class MachineTrainingAlgorithm {
                     //if term is vulnerability
 
                     if (markovStateService.isVulnerability(action.getTerm())){
-                        System.out.println("WIN"); //TODO update Q values and so on
+                        System.out.println("WIN" + " from Report: " + report.getTitle()); //TODO update Q values and so on
                         updateQValues(path);
-                        break;
+                        win = true;
                     }
                 } else {
                     action.setReply(new Reply(Reply.NO));

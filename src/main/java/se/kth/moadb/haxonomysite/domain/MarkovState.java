@@ -2,6 +2,7 @@ package se.kth.moadb.haxonomysite.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -52,6 +53,7 @@ public class MarkovState implements Comparable {
     }
 
 
+    @JsonIgnore
     public Collection<MarkovAction> getMarkovActions() {
         return markovActions;
     }

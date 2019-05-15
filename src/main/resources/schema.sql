@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS reply (
 
 CREATE TABLE IF NOT EXISTS markov_state (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    q_value INTEGER
+    q_value DOUBLE
 );
 
 CREATE TABLE IF NOT EXISTS markov_action (
