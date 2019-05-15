@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -32,4 +33,9 @@ public class MarkovAction {
         return copy;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        MarkovAction other = (MarkovAction) o;
+        return this.id == other.id;
+    }
 }

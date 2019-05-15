@@ -36,25 +36,21 @@ VALUES
        ('language', 1, 1),
        ('source code', 1, 2),
        ('user interface', 1, 1),
-       ('network & communication', 1, 1),
-       ('server', 1, 1),
-       ('account security', 1, 1),
-       ('encryption', 1, 3);
+       ('network & communication', 1, 1);
 
 -- Language
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('programming language', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2),
-       ('markup language', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2),
-       ('frameworks & libraries', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2);
+       ('markup language', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2);
 
 
 -- Reports
 INSERT INTO report(url, title, bounty)
 VALUES
        ('www.report1.com', 'SQL Injection', 100),
-       ('www.report5.com', 'XML External Entities (XXE)', 100),
-       ('www.report6.com', 'Cross-Site Request Forgery (CSRF)', 100);
+       ('www.report5.com', 'XSS', 100),
+       ('www.report6.com', 'IDOR', 100);
 
 -- ReportTerms
 INSERT INTO report_terms(reports_id, terms_id)

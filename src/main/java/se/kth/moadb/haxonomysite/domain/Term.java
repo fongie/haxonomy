@@ -38,11 +38,7 @@ public class Term {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Term term = (Term) o;
-        return id == term.id &&
-                Objects.equals(name, term.name);
+        Term other = (Term) o;
+        return this.id == other.id;
     }
-
 }

@@ -37,8 +37,10 @@ public class MarkovState implements Comparable {
         MarkovState compare = (MarkovState)o;
         if (this.qValue > compare.qValue)
             return 1;
-        else
+        else if (this.qValue == compare.qValue)
             return 0;
+        else
+            return -1;
     }
 
     public MarkovState copy() {
