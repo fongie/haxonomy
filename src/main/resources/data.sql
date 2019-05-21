@@ -56,8 +56,8 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('programming language', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2),
-       ('markup language', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2),
-       ('frameworks & libraries', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2);
+       ('markup language', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2);
+--       ('frameworks & libraries', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'language'), 2);
 
 -- Source code
 INSERT INTO term(name, broader_term_id, time_id)
@@ -83,12 +83,12 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('cloud services', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
-       ('operating system', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
+--       ('operating system', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
        ('server software', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
        ('database', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
-       ('server techniques', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 3),
-       ('port', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
-       ('host', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2);
+       ('server techniques', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 3);
+--       ('port', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2),
+--       ('host', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server'), 2);
 
 -- Account security
 INSERT INTO term(name, broader_term_id, time_id)
@@ -101,19 +101,19 @@ INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('base64', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'encryption'), 1),
        ('public key', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'encryption'), 1),
-       ('secret key', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'encryption'), 3),
-       ('sigchain', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'encryption'), 3);
+       ('secret key', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'encryption'), 3);
+--       ('sigchain', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'encryption'), 3);
 
 -- Programming language
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('python', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3),
+--       ('python', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3),
        ('javascript', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 1),
-       ('coffeescript', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 2),
-       ('css', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 1),
-       ('php', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3),
-       ('java', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3),
-       ('asp', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3);
+--       ('coffeescript', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 2),
+--       ('css', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 1),
+       ('php', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3);
+--       ('java', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3),
+--       ('asp', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'programming language'), 3);
 
 -- Markup language
 INSERT INTO term(name, broader_term_id, time_id)
@@ -124,32 +124,32 @@ VALUES
        ('json', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'markup language'), 2);
 
 -- Frameworks & libraries
-INSERT INTO term(name, broader_term_id, time_id)
-VALUES
-       ('angularjs', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 1),
-       ('jquery', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 1),
-       ('django', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 2),
-       ('ajax', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 2),
-       ('bootstrap', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 1);
+-- INSERT INTO term(name, broader_term_id, time_id)
+-- VALUES
+--        ('angularjs', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 1),
+--        ('jquery', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 1),
+--        ('django', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 2),
+--        ('ajax', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 2),
+--        ('bootstrap', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'frameworks & libraries'), 1);
 
 -- Source code resources
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('github', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code resources'), 2),
-       ('wayback machine', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code resources'), 2),
-       ('crawler', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code resources'), 2);
+       ('github', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code resources'), 2);
+--       ('wayback machine', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code resources'), 2),
+--       ('crawler', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code resources'), 2);
 
 -- Source code vulnerabilities
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('json stringify', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
-       ('broken html', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
-       ('canary protection', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
-       ('concatenation', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
-       ('dom', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
-       ('location property', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('json stringify', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('broken html', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('canary protection', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('concatenation', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('dom', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('location property', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
        ('unsanitized characters', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
-       ('validation', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
+--       ('validation', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
        ('templating', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 2),
        ('configuration', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'source code vulnerabilities'), 3);
 
@@ -177,10 +177,10 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('account', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1),
-       ('payment', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1),
-       ('profile', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1),
-       ('membership', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1),
-       ('subscription', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1);
+--       ('payment', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1),
+       ('profile', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1);
+--       ('membership', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1),
+--       ('subscription', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'website functionality'), 1);
 
 -- Request
 INSERT INTO term(name, broader_term_id, time_id)
@@ -190,9 +190,9 @@ VALUES
        ('header', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1),
        ('post', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1),
        ('get', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1),
-       ('put', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1),
-       ('delete', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1),
-       ('status codes', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 2);
+       ('put', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1);
+--       ('delete', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 1),
+--       ('status codes', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'request'), 2);
 
 -- URL
 INSERT INTO term(name, broader_term_id, time_id)
@@ -204,9 +204,9 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('http parameter', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
-       ('sid parameter', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
-       ('single-character parameter', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
-       ('ssrf protection', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
+--       ('sid parameter', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
+--       ('single-character parameter', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
+--       ('ssrf protection', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1),
        ('insecure direct object reference', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 3),
        ('csrf protection', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'parameter'), 1);
 
@@ -214,9 +214,9 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('user-agent header', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1),
-       ('same-origin', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1),
+--       ('same-origin', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1),
        ('security header', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1),
-       ('cookie', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1),
+--       ('cookie', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1),
        ('content security policy', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'header'), 1);
 
 -- Protocol
@@ -228,7 +228,7 @@ VALUES
 -- Redirect
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('server redirect', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'redirect'), 2),
+--       ('server redirect', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'redirect'), 2),
        ('client redirect', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'redirect'), 2);
 
 -- DNS
@@ -243,25 +243,25 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('azure', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2),
-       ('amazon', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2),
-       ('google cloud', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2),
-       ('heroku', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2);
+       ('amazon', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2);
+--       ('google cloud', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2),
+--       ('heroku', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'cloud services'), 2);
 
 -- Operation system
-INSERT INTO term(name, broader_term_id, time_id)
-VALUES
-       ('linux', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3),
-       ('windows nt', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3),
-       ('windows', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3),
-       ('osx', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3);
+-- INSERT INTO term(name, broader_term_id, time_id)
+-- VALUES
+--        ('linux', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3),
+--        ('windows nt', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3),
+--        ('windows', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3),
+--        ('osx', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'operating system'), 3);
 
 -- Server software
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('apache http server', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
-       ('apache tomcat', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
-       ('jetty', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
-       ('nginx', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
+--       ('apache http server', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
+--       ('apache tomcat', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
+--       ('jetty', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
+--       ('nginx', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2),
        ('cms', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server software'), 2);
 
 -- CMS
@@ -273,19 +273,19 @@ VALUES
 -- Database
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('mysql', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'database'), 3),
-       ('postgres', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'database'), 3);
+       ('mysql', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'database'), 3);
+--       ('postgres', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'database'), 3);
 
 -- Server techniques
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('sandboxing', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server techniques'), 3),
+--       ('sandboxing', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server techniques'), 3),
        ('virtual machine', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'server techniques'), 3);
 
 -- Authorization
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('privilege', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authorization'), 2),
+--       ('privilege', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authorization'), 2),
        ('write-access', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authorization'), 2),
        ('administrator', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authorization'), 2),
        ('read-access', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authorization'), 2);
@@ -294,13 +294,13 @@ VALUES
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
        ('token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authentication'), 1),
-       ('session', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authentication'), 1),
-       ('credentials', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authentication'), 1),
+--       ('session', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authentication'), 1),
+--       ('credentials', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authentication'), 1),
        ('oauth', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'authentication'), 1);
 
 -- Token
 INSERT INTO term(name, broader_term_id, time_id)
 VALUES
-       ('csrf token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
-       ('access token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
-       ('oauth token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1);
+       ('csrf token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1);
+--       ('access token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1),
+--       ('oauth token', (SELECT id FROM (SELECT id, name FROM term) AS a WHERE name = 'token'), 1);
