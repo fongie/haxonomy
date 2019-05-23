@@ -1,6 +1,7 @@
 package se.kth.moadb.haxonomysite.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,5 +19,15 @@ public class Report {
 
     @ManyToMany
     Collection<Term> terms;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public Term getVulnerability() {
+        return terms.stream()
+              .filter(
+                    term -> term.hasBroaderTerm() && term.getBroaderTerm().getName().equals(Term.ROOT_VULNERABILITY)
+              )
+              .findFirst()
+              .get();
+    }
 
 }
