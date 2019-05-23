@@ -2,14 +2,20 @@ package se.kth.moadb.haxonomysite.presentation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import se.kth.moadb.haxonomysite.domain.Report;
+import se.kth.moadb.haxonomysite.domain.Term;
+import se.kth.moadb.haxonomysite.repository.ReportRepository;
 
 import java.io.IOException;
 
 @RestController
 public class ReportController {
+   @Autowired
+   private ReportRepository reportRepository;
 
     @PostMapping("/reportData")
     public ReportMetadataPostRequest successLogin(@RequestBody ReportMetadataPostRequest reportMetadataPostRequest){
@@ -32,6 +38,21 @@ public class ReportController {
         reportMetadataPostRequest.setBounty(bounty);
         reportMetadataPostRequest.setVulnerability(vulnerability);
         return reportMetadataPostRequest;
+    }
+
+    @GetMapping("/reports/{id}/vulnerability")
+   public Term getReportVulnerability(@PathVariable long id) {
+
+       //TODO check if exists before get
+        Report report = reportRepository.findById(id).get();
+        Term vulnerability = report.getTerms().stream()
+              .filter(
+                    term -> term.hasBroaderTerm() && term.getBroaderTerm().getName().equals(Term.ROOT_VULNERABILITY)
+              )
+              .findFirst()
+              .get();
+
+        return vulnerability;
     }
 
 }
