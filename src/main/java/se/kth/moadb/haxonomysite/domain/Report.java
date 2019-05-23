@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -22,12 +23,15 @@ public class Report {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public Term getVulnerability() {
-        return terms.stream()
+        Optional<Term> vuln = terms.stream()
               .filter(
                     term -> term.hasBroaderTerm() && term.getBroaderTerm().getName().equals(Term.ROOT_VULNERABILITY)
               )
-              .findFirst()
-              .get();
+              .findFirst();
+        if (vuln.isPresent())
+            return vuln.get();
+        else
+            return null;
     }
 
 }
