@@ -49,8 +49,8 @@ VALUES
 INSERT INTO report(url, title, bounty)
 VALUES
        ('www.report1.com', 'SQL Injection', 100),
-       ('www.report5.com', 'XSS', 100),
-       ('www.report6.com', 'IDOR', 100);
+       ('www.report5.com', 'Cross-Site Scripting (XSS)', 100),
+       ('www.report6.com', 'Insecure Direct Object Reference (IDOR)', 100);
 
 -- ReportTerms
 INSERT INTO report_terms(reports_id, terms_id)
@@ -60,6 +60,6 @@ VALUES
        (2,4),
        (2,9),
        (3,5),
-       (3,11);
+       (3,10);
 
 

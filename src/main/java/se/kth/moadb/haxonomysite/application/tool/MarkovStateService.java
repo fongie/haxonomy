@@ -73,13 +73,13 @@ public class MarkovStateService {
     }
 
     public boolean isVulnerability(Term term){
-        System.out.println("I am a checking for vulnerability: " + term.getName());
+        System.out.println("Checking for vulnerability: " + term.getName());
         boolean isVul = term.getBroaderTerm().equals(termRepository.findByName("vulnerabilities"));
         //return term.getBroaderTerm().equals(termRepository.findByName("vulnerabilities"));
         if (isVul)
-            System.out.println("I am vulnerability: " + term.getName());
+            System.out.println("Vulnerability found: " + term.getName());
         else
-            System.out.println("I am not vulnerability " + term.getName());
+            System.out.println("This is NOT a Vulnerability: " + term.getName());
 
         return isVul;
     }

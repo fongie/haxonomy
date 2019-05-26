@@ -11,6 +11,7 @@ import se.kth.moadb.haxonomysite.repository.TermRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class uses Q-learning to build a policy/map that can be used to guide the user
@@ -76,10 +77,10 @@ public class MachineTrainingAlgorithm {
                 .get();
 
         if (comparing.getReply().equals(selected.getReply())) {
-            System.out.println("Comparing reply: " + comparing.getReply().getName() + " Selected reply: " + selected.getReply().getName());
+//            System.out.println("Comparing reply: " + comparing.getReply().getName() + " Selected reply: " + selected.getReply().getName());
             return true;
         }
-        System.out.println("Comparing != Selected" + " Comparing: " + comparing.getTerm().getName() + " " + comparing.getReply().getName() + " Selected: " + selected.getTerm().getName() + " " + selected.getReply().getName());
+//        System.out.println("Comparing != Selected" + " Comparing: " + comparing.getTerm().getName() + " " + comparing.getReply().getName() + " Selected: " + selected.getTerm().getName() + " " + selected.getReply().getName());
         return false;
     }
 
@@ -98,7 +99,7 @@ public class MachineTrainingAlgorithm {
     private List<MarkovState> findPossibleStatesToGoTo(MarkovState currentState, Collection<MarkovState> allStates) {
         return allStates.stream()
                 .filter(state -> findActionsThatDiffer(currentState.getMarkovActions(), state.getMarkovActions()).size() == 1)
-                .peek(e -> System.out.println("findPossibleStatesToGoTo State Id: " + e.getId()))
+//                .peek(e -> System.out.println("findPossibleStatesToGoTo State Id: " + e.getId()))
                 .collect(Collectors.toList());
     }
 
@@ -120,11 +121,13 @@ public class MachineTrainingAlgorithm {
         // Epsilon is the threshold value where we want to make a random choice instead of choosing the State with the highest Q value
         double epsilon = 2;
 
-        int numberOfRound = 100;
+        int numberOfRound = 50;
         for (int round = 0; round<numberOfRound; round++){
             // Loop through all Reports
             for (Report report : listOfReports){
-//            System.out.println("Number of reports: " + listOfReports.size());
+                System.out.println("Number of reports: " + listOfReports.size());
+                System.out.println("========>>>>>>> Current REPORT: " + report.getTitle());
+
 
                 Deque<MarkovState> path = new LinkedList<>();
                 long currentStateId = firstState.getId();
@@ -220,19 +223,27 @@ public class MachineTrainingAlgorithm {
                             System.out.println("Term in maxQAction is: " + maxQAction.getTerm().getName());
                             //if our reports reply matches the one in qmaxvaluestate, go there
                             if (report.getTerms().contains(maxQAction.getTerm())) {
+
+//                                long reportId = maxQAction.getTerm().getId(); // save the id to be able to look in the report if it is YES later
+//                                Optional<Term> sameTermInReport = report.getTerms().stream()
+//                                        .filter(term -> term.equals(maxQAction.getTerm()))
+//                                        .findFirst();
+
                                 //MarkovAction maxQAction = possibleStateActions.get(maxQValueState);
 
-                                if (markovStateService.isVulnerability(maxQAction.getTerm()) && maxQAction.getReply().equals(new Reply(Reply.YES))){
-                                    path.addFirst(maxQValueState);
+//                                if (markovStateService.isVulnerability(maxQAction.getTerm()) && maxQAction.getReply().equals(new Reply(Reply.YES))){
+                                //TODO behöver kanske inte kolla maxQAction.getReply för den ska ju vara UNKNOWN nuinnan väl?
+                                if (markovStateService.isVulnerability(maxQAction.getTerm())){
                                     System.out.println("epsilon WIN" + " from Report: " + report.getTitle());
+                                    path.addFirst(maxQValueState);
                                     updateQValues(path);
                                     win = true;
-                                } else if (maxQAction.getReply().equals(new Reply(Reply.YES))) {
-                                    System.out.println("I matched the one in qmaxvaluestate");
+                                } else if (maxQAction.getReply().equals(new Reply(Reply.YES))) { //TODO det här replyet kommer väl alltid vara UNKOWN också den är YES i rapporten för att vi är inne i loopen
+                                    System.out.println("I matched the one in maxvaluestate");
                                     currentStateId = maxQValueState.getId();
                                 } else { //our report was different than qmax, find next state
                                     //if state already exists, use that, otherwise create new
-                                    System.out.println("I didnt match the one in qmaxvaluestate");
+                                    System.out.println("I didn't match the one in maxvaluestate");
                                     currentStateId = goToNextState(currentState, maxQAction, listOfPossibleStatesToGoTo);
                                 }
                             } else {
@@ -246,6 +257,9 @@ public class MachineTrainingAlgorithm {
         }
     }
     private long goToNextState(MarkovState currentState, MarkovAction selectedAction, Collection<MarkovState> possibleStatesToGoTo) {
+
+        System.out.println("Going to next state, current state is: "  + currentState.getId());
+
         long stateId = 0;
         boolean found = false;
         Term t = selectedAction.getTerm();
@@ -297,6 +311,12 @@ public class MachineTrainingAlgorithm {
 
     private long goToRandomState(Report report, MarkovState currentState, Deque<MarkovState> path) {
         System.out.println("--> Going to a random State!");
+
+        System.out.println("goToRandomState, current state: " + currentState.getId());
+        currentState.getMarkovActions().stream()
+                .map(MarkovAction::getReply)
+                .forEach(e -> System.out.println("MarkovAction Reply (current state): " + e.getName()));
+
         long currentStateId;
 //        System.out.println("Should go in here... No matching States");
         MarkovState nextState = currentState.copy();
@@ -306,12 +326,12 @@ public class MachineTrainingAlgorithm {
 
         Collection<MarkovAction> nextStateActions = nextState.getMarkovActions();
 
-        nextStateActions.stream()
-                .map(MarkovAction::getId)
-                .forEach(e -> System.out.println("MarkovAction Id: " + e));
-        nextStateActions.stream()
-                .map(MarkovAction::getReply)
-                .forEach(e -> System.out.println("MarkovAction Reply: " + e.getName()));
+//        nextStateActions.stream()
+//                .map(MarkovAction::getId)
+//                .forEach(e -> System.out.println("MarkovAction Id: " + e));
+//        nextStateActions.stream()
+//                .map(MarkovAction::getReply)
+//                .forEach(e -> System.out.println("MarkovAction Reply: " + e.getName()));
 
         List<MarkovAction> listOfNextStateActions = new ArrayList<>(nextStateActions);
 
@@ -353,6 +373,15 @@ public class MachineTrainingAlgorithm {
         } else {
             randomAction.setReply(new Reply(Reply.NO));
         }
+
+
+        nextStateActions.stream()
+                .map(MarkovAction::getTerm)
+                .forEach(e -> System.out.println("MarkovAction Term: " + e));
+        nextStateActions.stream()
+                .map(MarkovAction::getReply)
+                .forEach(e -> System.out.println("MarkovAction Reply: " + e.getName()));
+
 
         nextState.setMarkovActions(listOfNextStateActions);
         markovStateRepository.save(nextState); // save next State with actions
