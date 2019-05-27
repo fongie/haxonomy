@@ -1,4 +1,4 @@
-package se.kth.moadb.haxonomysite.domain.nonpersistant;
+package se.kth.moadb.haxonomysite.domain.nonpersistent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
