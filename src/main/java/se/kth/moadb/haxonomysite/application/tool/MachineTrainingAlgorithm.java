@@ -86,8 +86,8 @@ public class MachineTrainingAlgorithm {
 
     private Collection<MarkovAction> findActionsThatDiffer(Collection<MarkovAction> one, Collection<MarkovAction> other) {
         return one.stream()
-                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN
                 .filter(markovAction -> !hasSameTermAndReply(markovAction, other))
+//                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN
 //                .peek(e -> System.out.println("Should be unknown: " + e.getReply().getName()))
                 .collect(Collectors.toList());
     }
@@ -97,6 +97,13 @@ public class MachineTrainingAlgorithm {
     * Streams through all saved States and runs #findActionsThatDiffer(currentStateMarkovActions, theComparingStatesMarkovActions)
      */
     private List<MarkovState> findPossibleStatesToGoTo(MarkovState currentState, Collection<MarkovState> allStates) {
+
+        System.out.println("IN FUNCTION findPossibleStatesToGoTo");
+        System.out.println("This is the actions in current State that was sen here");
+        currentState.getMarkovActions().stream()
+                .map(MarkovAction::getReply)
+                .forEach(System.out::println);
+
         return allStates.stream()
                 .filter(state -> findActionsThatDiffer(currentState.getMarkovActions(), state.getMarkovActions()).size() == 1)
 //                .peek(e -> System.out.println("findPossibleStatesToGoTo State Id: " + e.getId()))
@@ -111,6 +118,8 @@ public class MachineTrainingAlgorithm {
     public void trainingAlgorithm(){
 
         MarkovState firstState = markovStateService.init();
+        MarkovState secondState = firstState.copy();
+        secondState = markovStateService.saveMarkovState(secondState);
 
         System.out.println("Beginning training...");
 
@@ -130,7 +139,7 @@ public class MachineTrainingAlgorithm {
 
 
                 Deque<MarkovState> path = new LinkedList<>();
-                long currentStateId = firstState.getId();
+                long currentStateId = secondState.getId();
 
                 win = false;
                 while (!win) {
@@ -219,11 +228,16 @@ public class MachineTrainingAlgorithm {
                                 .map(MarkovAction::getReply)
                                 .forEach(System.out::println); // look whats in here
 
-                        if (maxQValueState.getQValue() < epsilon) {
+                        //must get maxQAction and maxQActionIsVulnerability to make a check in the epsilon if statement otherwise it might be a vulnerability and
+                        //then set to NO even though it is the vulnerability in current report
+                        MarkovAction maxQAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
+                        boolean maxQActionIsVulnerability = markovStateService.isVulnerability(maxQAction.getTerm());
+
+                        if (maxQValueState.getQValue() < epsilon && !maxQActionIsVulnerability) {
                             System.out.println("The Q-value was smaller than Epsilon, choosing another path. Q-value was: " + maxQValueState.getQValue());
                             currentStateId = goToRandomState(report, currentState, path);
                         } else {
-                            MarkovAction maxQAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
+//                            MarkovAction maxQAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
                             System.out.println("Term in maxQAction is: " + maxQAction.getTerm().getName());
 
                             long maxQActionId = maxQAction.getId();
@@ -331,9 +345,8 @@ public class MachineTrainingAlgorithm {
     }
 
     private long goToRandomState(Report report, MarkovState currentState, Deque<MarkovState> path) {
-        System.out.println("--> Going to a random State!");
 
-        System.out.println("Going to a random State, current state: " + currentState.getId());
+        System.out.println("--> Going to a random State, current state: " + currentState.getId());
         currentState.getMarkovActions().stream()
                 .map(MarkovAction::getReply)
                 .forEach(e -> System.out.println("MarkovAction Reply (current state): " + e.getName()));
