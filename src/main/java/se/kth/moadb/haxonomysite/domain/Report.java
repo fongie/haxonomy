@@ -33,5 +33,4 @@ public class Report {
         else
             return null;
     }
-
 }
