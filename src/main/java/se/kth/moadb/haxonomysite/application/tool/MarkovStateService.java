@@ -76,7 +76,7 @@ public class MarkovStateService {
         System.out.println("Checking for vulnerability: " + term.getName());
 
         boolean isVul = false;
-        if (!term.getName().equals("attack surfaces") || !term.getName().equals("vulnerabilities")) // returns null if term is vulnerability
+        if (term.getId() != 1 && term.getId() != 2) // returns null if term is vulnerability
             isVul = term.getBroaderTerm().equals(termRepository.findByName("vulnerabilities"));
         //return term.getBroaderTerm().equals(termRepository.findByName("vulnerabilities"));
         if (isVul)

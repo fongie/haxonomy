@@ -67,6 +67,17 @@ public class MachineTrainingAlgorithm {
 
 
     /*
+    * Should remove the states that goes backwards (from NO or YES to UNKNOWN)
+     */
+    private Collection<MarkovAction> dontGoTheWrongWay(MarkovState currentState, MarkovState otherState){
+
+        return currentState.getMarkovActions().stream()
+                .filter(markovAction -> !hasSameTermAndReply(markovAction, otherState.getMarkovActions()))
+                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN)))
+                .collect(Collectors.toList());
+    }
+
+    /*
     * Returns true if two markovActions has the same Term and Reply
      */
     private boolean hasSameTermAndReply(MarkovAction comparing, Collection<MarkovAction> collection) {
@@ -87,7 +98,7 @@ public class MachineTrainingAlgorithm {
     private Collection<MarkovAction> findActionsThatDiffer(Collection<MarkovAction> one, Collection<MarkovAction> other) {
         return one.stream()
                 .filter(markovAction -> !hasSameTermAndReply(markovAction, other))
-//                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN
+//                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN TODO this can't be filtered here, results in wrong states beeing saved in possibleStatesToGoTo
 //                .peek(e -> System.out.println("Should be unknown: " + e.getReply().getName()))
                 .collect(Collectors.toList());
     }
@@ -104,9 +115,15 @@ public class MachineTrainingAlgorithm {
                 .map(MarkovAction::getReply)
                 .forEach(System.out::println);
 
-        return allStates.stream()
+        List<MarkovState> statesWithOneTermThatDiffer = allStates.stream()
                 .filter(state -> findActionsThatDiffer(currentState.getMarkovActions(), state.getMarkovActions()).size() == 1)
 //                .peek(e -> System.out.println("findPossibleStatesToGoTo State Id: " + e.getId()))
+                .collect(Collectors.toList());
+
+
+        // remove the ones that goes from YES to UNKNOWN or NO to UNKNOWN
+        return statesWithOneTermThatDiffer.stream()
+                .filter(state -> dontGoTheWrongWay(currentState, state).size() == 1)
                 .collect(Collectors.toList());
     }
 
