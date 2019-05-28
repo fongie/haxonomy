@@ -113,10 +113,13 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
             return noMoreSuggestions;
         } else {
             MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
-            System.out.println(maxQValueState.getQValue());
+            System.out.println("Max Q-value State Id: " + maxQValueState.getId());
+            System.out.println("Max Q-value State Q-value: " + maxQValueState.getQValue());
 
             MarkovAction nextAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
-            return nextAction;
+            System.out.println("Next Action: " + nextAction.getId());
+            return maxQValueState.getMarkovActions().stream()
+                    .filter(action -> action.getTerm().getId() == nextAction.getTerm().getId()).findFirst().get(); // it is the maxQValueStates maxAction that we want to return
         }
     }
 }

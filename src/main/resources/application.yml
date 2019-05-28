@@ -4,7 +4,7 @@ spring:
     username: root
     password: password
     platform: mysql
-    initialization-mode: always
+    initialization-mode: never
   jpa:
     hibernate:
       ddl-auto: none #should be none in production
