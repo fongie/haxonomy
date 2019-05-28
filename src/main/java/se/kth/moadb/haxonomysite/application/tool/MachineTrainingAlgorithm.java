@@ -72,8 +72,8 @@ public class MachineTrainingAlgorithm {
     private Collection<MarkovAction> dontGoTheWrongWay(MarkovState currentState, MarkovState otherState){
 
         return currentState.getMarkovActions().stream()
-                .filter(markovAction -> !hasSameTermAndReply(markovAction, otherState.getMarkovActions()))
-                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN)))
+                .filter(markovAction -> !hasSameTermAndReply(markovAction, otherState.getMarkovActions()) && markovAction.getReply().equals(new Reply(Reply.UNKNOWN)))
+//                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN)))
                 .collect(Collectors.toList());
     }
 
@@ -97,7 +97,7 @@ public class MachineTrainingAlgorithm {
 
     private Collection<MarkovAction> findActionsThatDiffer(Collection<MarkovAction> one, Collection<MarkovAction> other) {
         return one.stream()
-                .filter(markovAction -> !hasSameTermAndReply(markovAction, other))
+                .filter(markovAction -> !hasSameTermAndReply(markovAction, other)) // cannot add && markovAction.getReply().equals(new Reply(Reply.UNKNOWN))
 //                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN TODO this can't be filtered here, results in wrong states beeing saved in possibleStatesToGoTo
 //                .peek(e -> System.out.println("Should be unknown: " + e.getReply().getName()))
                 .collect(Collectors.toList());
