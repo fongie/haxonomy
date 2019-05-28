@@ -296,11 +296,17 @@ public class MachineTrainingAlgorithm {
                                 } else { //our report was different than qmax, find next state
                                     //if state already exists, use that, otherwise create new
                                     System.out.println("I didn't match the one in maxvaluestate");
-                                    currentStateId = goToNextState(currentState, maxQAction, listOfPossibleStatesToGoTo);
+//                                    long before = currentStateId;
+                                    currentStateId = goToNextState(currentState, maxQAction, listOfPossibleStatesToGoTo, "YES", path);
+//                                    if (before == currentStateId)
+//                                        goToRandomState(report,currentState, path);
                                 }
                             } else {
                                 //System.out.println("NU LOOPAR VI FOREVER");
-                                currentStateId = goToNextState(currentState, maxQAction, listOfPossibleStatesToGoTo);
+//                                long before = currentStateId;
+                                currentStateId = goToNextState(currentState, maxQAction, listOfPossibleStatesToGoTo, "NO", path);
+//                                if (before == currentStateId)
+//                                    goToRandomState(report,currentState, path);
                             }
                         }
                     }
@@ -308,11 +314,11 @@ public class MachineTrainingAlgorithm {
             }
         }
     }
-    private long goToNextState(MarkovState currentState, MarkovAction selectedAction, Collection<MarkovState> possibleStatesToGoTo) {
+    private long goToNextState(MarkovState currentState, MarkovAction selectedAction, Collection<MarkovState> possibleStatesToGoTo, String yesOrNo, Deque<MarkovState> path) {
 
         System.out.println("Going to next state, current state is: "  + currentState.getId());
 
-        long stateId = 0;
+        long stateId = currentState.getId();
         boolean found = false;
         Term t = selectedAction.getTerm();
         Reply r = new Reply(Reply.NO);
@@ -336,27 +342,59 @@ public class MachineTrainingAlgorithm {
         */
         if (!found) {
             System.out.println("Not Found");
+
+//            MarkovState copy = currentState.copy();
+//            copy = markovStateService.saveMarkovState(copy);
+//
+//            copy = markovStateRepository.save(copy);
+//            stateId = copy.getId();
+
             MarkovState copy = currentState.copy();
             copy = markovStateService.saveMarkovState(copy);
 
             Collection<MarkovAction> actions = copy.getMarkovActions();
 
-            for (MarkovAction a : actions) {
-                if (a.getTerm().equals(selectedAction.getTerm())) {
-                    a.setReply(new Reply(Reply.NO));
+            // create the State that we want to go to
+            if (yesOrNo.equalsIgnoreCase("YES")){
+                for (MarkovAction a : actions) {
+                    if (a.getTerm().equals(selectedAction.getTerm())) {
+                        a.setReply(new Reply(Reply.YES));
+                    }
                 }
-            }
-            copy.setMarkovActions(actions);
+                copy.setMarkovActions(actions);
+                copy = markovStateRepository.save(copy);
+                stateId = copy.getId();
 
-            /*
-            actions.stream()
-                    .filter(action -> action.getTerm().equals(selectedAction.getTerm()))
-                    .findFirst()
-                    .get()
-                    .setReply(new Reply(Reply.NO));
-             */
-            copy = markovStateRepository.save(copy);
-            stateId = copy.getId();
+                if (markovStateService.isVulnerability(selectedAction.getTerm())) {
+                    System.out.println("WIN");
+                    path.addFirst(copy);
+                    updateQValues(path);
+                    win = true;
+                }
+
+            }
+            if (yesOrNo.equalsIgnoreCase("NO")){
+                for (MarkovAction a : actions) {
+                    if (a.getTerm().equals(selectedAction.getTerm())) {
+                        a.setReply(new Reply(Reply.NO));
+                    }
+                }
+                copy.setMarkovActions(actions);
+                copy = markovStateRepository.save(copy);
+                stateId = copy.getId();
+            }
+
+//            copy.setMarkovActions(actions);
+//
+//            /*
+//            actions.stream()
+//                    .filter(action -> action.getTerm().equals(selectedAction.getTerm()))
+//                    .findFirst()
+//                    .get()
+//                    .setReply(new Reply(Reply.NO));
+//             */
+//            copy = markovStateRepository.save(copy);
+//            stateId = copy.getId();
         }
         return stateId;
     }
@@ -393,6 +431,8 @@ public class MachineTrainingAlgorithm {
             }
         }
 
+        System.out.println("NOW FOR THE RANDOM PART");
+        System.out.println("Size of onlyUnknownActions: " + onlyUnknownActions.size());
         Random rand = new Random();
 
         int bound;
@@ -401,7 +441,10 @@ public class MachineTrainingAlgorithm {
         else
             bound = onlyUnknownActions.size();
 
-        int randomIndex = rand.nextInt(bound);
+        int randomIndex = rand.nextInt(bound); //TODO should be +1 or not? if we try to get State 0, we will get nullpointer exception
+//        if (randomIndex == 0)
+//            randomIndex = 1;
+
 //        System.out.println("Random index:" + randomIndex);
 
         Long id = onlyUnknownActions.get(randomIndex).getId();
