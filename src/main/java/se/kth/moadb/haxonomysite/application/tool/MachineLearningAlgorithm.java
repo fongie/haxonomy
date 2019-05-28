@@ -42,6 +42,17 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 
 
     /*
+     * Should remove the states that goes backwards (from NO or YES to UNKNOWN)
+     */
+    private Collection<MarkovAction> dontGoTheWrongWay(MarkovState currentState, MarkovState otherState){
+
+        return currentState.getMarkovActions().stream()
+                .filter(markovAction -> !hasSameTermAndReply(markovAction, otherState.getMarkovActions()) && markovAction.getReply().equals(new Reply(Reply.UNKNOWN)))
+//                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN)))
+                .collect(Collectors.toList());
+    }
+
+    /*
      * Returns true if two markovActions has the same Term and Reply
      */
     private boolean hasSameTermAndReply(MarkovAction comparing, Collection<MarkovAction> collection) {
@@ -61,8 +72,8 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 
     private Collection<MarkovAction> findActionsThatDiffer(Collection<MarkovAction> one, Collection<MarkovAction> other) {
         return one.stream()
-                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN
-                .filter(markovAction -> !hasSameTermAndReply(markovAction, other))
+                .filter(markovAction -> !hasSameTermAndReply(markovAction, other)) // cannot add && markovAction.getReply().equals(new Reply(Reply.UNKNOWN))
+//                .filter(markovAction -> markovAction.getReply().equals(new Reply(Reply.UNKNOWN))) //only keep the UNKNOWN TODO this can't be filtered here, results in wrong states beeing saved in possibleStatesToGoTo
 //                .peek(e -> System.out.println("Should be unknown: " + e.getReply().getName()))
                 .collect(Collectors.toList());
     }
@@ -72,9 +83,22 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
      * Streams through all saved States and runs #findActionsThatDiffer(currentStateMarkovActions, theComparingStatesMarkovActions)
      */
     private List<MarkovState> findPossibleStatesToGoTo(MarkovState currentState, Collection<MarkovState> allStates) {
-        return allStates.stream()
+
+        System.out.println("IN FUNCTION findPossibleStatesToGoTo");
+        System.out.println("This is the actions in current State that was sen here");
+        currentState.getMarkovActions().stream()
+                .map(MarkovAction::getReply)
+                .forEach(System.out::println);
+
+        List<MarkovState> statesWithOneTermThatDiffer = allStates.stream()
                 .filter(state -> findActionsThatDiffer(currentState.getMarkovActions(), state.getMarkovActions()).size() == 1)
 //                .peek(e -> System.out.println("findPossibleStatesToGoTo State Id: " + e.getId()))
+                .collect(Collectors.toList());
+
+
+        // remove the ones that goes from YES to UNKNOWN or NO to UNKNOWN
+        return statesWithOneTermThatDiffer.stream()
+                .filter(state -> dontGoTheWrongWay(currentState, state).size() == 1)
                 .collect(Collectors.toList());
     }
 
@@ -92,52 +116,16 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
         List<MarkovState> listOfPossibleStatesToGoTo = findPossibleStatesToGoTo(currentState, allStates);
         System.out.println("Number of states that we can go to from here: " + listOfPossibleStatesToGoTo.size());
 
-        MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
-        System.out.println(maxQValueState.getQValue());
+        if (listOfPossibleStatesToGoTo.isEmpty()){
+            MarkovAction noMoreSuggestions = currentState.getMarkovActions().stream().findFirst().get().copy();
+            noMoreSuggestions.setId(999999999);
+            return noMoreSuggestions;
+        } else {
+            MarkovState maxQValueState = Collections.max(listOfPossibleStatesToGoTo);
+            System.out.println(maxQValueState.getQValue());
 
-        MarkovAction nextAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
-        return nextAction;
+            MarkovAction nextAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
+            return nextAction;
+        }
     }
 }
-
-
-//        List<MarkovAction> listOfCurrentActions = new ArrayList<>(currentState.getMarkovActions());
-
-//        System.out.println("Current Markov State:" + currentState.getId());
-//        System.out.println("Size of list of current Markov Actions:" + listOfCurrentActions.size());
-
-//        List<MarkovState> allMarkovStates = new ArrayList<>(stateCollection);
-
-//        System.out.println("Number of MarkovStates in Database: " + allMarkovStates.size());
-
-//        List<MarkovState> listOfPossibleStatesToGoTo = new ArrayList<>();
-//        HashMap<MarkovState, MarkovAction> stateActionMap = new HashMap<>();
-//        HashMap<MarkovState, MarkovAction> possibleStateActions = new HashMap<>();
-
-
-//        for (MarkovState state : allMarkovStates) {
-//
-//            List<MarkovAction> actions = new ArrayList<>(state.getMarkovActions());
-////            System.out.println("Number of actions in this specific State:" + actions.size());
-////            System.out.println("Reply in first action: " + actions.get(147).getReply());
-//            System.out.println("Current state in loop: " + state.getId());
-//
-//            int numberOfTermsWidthDifferentStatus = 0;
-//            for (int i = 0; i < actions.size(); i++) {
-//                if (!actions.get(i).getReply().equals(listOfCurrentActions.get(i).getReply())) {
-////                    System.out.println("listOfCurrentActions.get(i).getReply(): " + listOfCurrentActions.get(i).getReply());
-////                    System.out.println("actions.get(i).getReply(): " + actions.get(i).getReply());
-//                    numberOfTermsWidthDifferentStatus++;
-//                    stateActionMap.put(state, actions.get(i)); // update HashTable with relevant State and Term info
-//                }
-//                if (numberOfTermsWidthDifferentStatus > 1) {
-//                    stateActionMap.clear(); // clear if more than one difference
-//                    break;
-//                }
-//            }
-//            if (numberOfTermsWidthDifferentStatus == 1) {
-//                System.out.println(state.getQValue());
-//                listOfPossibleStatesToGoTo.add(state);
-//                possibleStateActions.put(state, stateActionMap.get(state));
-//            }
-//        }

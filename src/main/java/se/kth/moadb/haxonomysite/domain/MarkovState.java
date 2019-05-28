@@ -71,4 +71,8 @@ public class MarkovState implements Comparable {
     public void setQValue(double qValue) {
         this.qValue = qValue;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }
