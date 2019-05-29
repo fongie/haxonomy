@@ -147,7 +147,7 @@ public class MachineTrainingAlgorithm {
         // Epsilon is the threshold value where we want to make a random choice instead of choosing the State with the highest Q value
         double epsilon = 2;
 
-        int numberOfRound = 20;
+        int numberOfRound = 5;
         for (int round = 0; round<numberOfRound; round++){
             // Loop through all Reports
             for (Report report : listOfReports){
@@ -469,12 +469,12 @@ public class MachineTrainingAlgorithm {
         }
 
 
-        nextStateActions.stream()
-                .map(MarkovAction::getTerm)
-                .forEach(e -> System.out.println("MarkovAction Term: " + e));
-        nextStateActions.stream()
-                .map(MarkovAction::getReply)
-                .forEach(e -> System.out.println("MarkovAction Reply: " + e.getName()));
+//        nextStateActions.stream()
+//                .map(MarkovAction::getTerm)
+//                .forEach(e -> System.out.println("MarkovAction Term: " + e));
+//        nextStateActions.stream()
+//                .map(MarkovAction::getReply)
+//                .forEach(e -> System.out.println("MarkovAction Reply: " + e.getName()));
 
 
         nextState.setMarkovActions(listOfNextStateActions);
