@@ -94,4 +94,15 @@ public class MarkovStateService {
     public void startTraining(){
         machineTrainingAlgorithm.trainingAlgorithm();
     }
+
+    /**
+     * Finds next action if the answer from the client didn't match the expected answer in previous state
+     * @param stateId Current State Id
+     * @param actionStatus The clients answer regarding the suggested term
+     * @param termId The name of the Term that was asked about
+     * @return A new MarkovAction that fits with this different answer we just received
+     */
+    public MarkovAction getActionFromNewPath(long stateId, String actionStatus, long termId) {
+        return actionChoosingAlgorithm.chooseActionFromNewPath(stateId, actionStatus, termId);
+    }
 }

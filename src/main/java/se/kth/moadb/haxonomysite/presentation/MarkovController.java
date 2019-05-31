@@ -36,4 +36,9 @@ public class MarkovController {
         markovStateService.startTraining();
         return returnMessage;
     }
+
+    @GetMapping(value = "/tool/mismatch/{stateId}/{actionStatus}/{termId}")
+    public MarkovAction getActionFromNewPath(@PathVariable long stateId, @PathVariable String actionStatus, @PathVariable long termId){
+        return markovStateService.getActionFromNewPath(stateId, actionStatus, termId);
+    }
 }

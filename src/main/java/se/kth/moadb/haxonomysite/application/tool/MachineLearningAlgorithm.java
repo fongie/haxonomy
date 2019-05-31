@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.domain.MarkovAction;
 import se.kth.moadb.haxonomysite.domain.MarkovState;
 import se.kth.moadb.haxonomysite.domain.Reply;
+import se.kth.moadb.haxonomysite.domain.Term;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
 import se.kth.moadb.haxonomysite.repository.MarkovStateRepository;
+import se.kth.moadb.haxonomysite.repository.TermRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +33,9 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
     @Autowired
     MarkovStateRepository markovStateRepository;
 
+    @Autowired
+    TermRepository termRepository;
+
 
     /*
      * Should remove the states that goes backwards (from NO or YES to UNKNOWN)
@@ -53,6 +58,7 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
                 .findFirst()
                 .get();
 
+        System.out.println("Comparing: " + comparing.getReply() + "Selected: " + selected.getReply() + selected.getId());
         if (comparing.getReply().equals(selected.getReply())) {
 //            System.out.println("Comparing reply: " + comparing.getReply().getName() + " Selected reply: " + selected.getReply().getName());
             return true;
@@ -118,8 +124,64 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 
             MarkovAction nextAction = findActionsThatDiffer(currentState.getMarkovActions(), maxQValueState.getMarkovActions()).stream().findFirst().get();
             System.out.println("Next Action: " + nextAction.getId());
-            return maxQValueState.getMarkovActions().stream()
+            MarkovAction actionToReturn =  maxQValueState.getMarkovActions().stream()
                     .filter(action -> action.getTerm().getId() == nextAction.getTerm().getId()).findFirst().get(); // it is the maxQValueStates maxAction that we want to return
+            System.out.println("Reply in returned action: " + actionToReturn.getReply());
+            return  actionToReturn;
+        }
+    }
+
+    /**
+     * Finds next action if the answer from the client didn't match the expected answer in previous state
+     * @param stateId Current State Id
+     * @param actionStatus The clients answer regarding the suggested term
+     * @param termId The name of the Term that was asked about
+     * @return A new MarkovAction that fits with this different answer we just received
+     */
+    @Override
+    public MarkovAction chooseActionFromNewPath(long stateId, String actionStatus, long termId) {
+
+        /*
+        * Get currentState, allStates, answeredTerm, possibleStateToGoTo and create a boolean value
+         */
+        MarkovState currentState = markovStateRepository.findById(stateId); //TODO får vi tillbaks stateID från det state vi är i innan frågan är besvarad?
+        Collection<MarkovState> allStates = markovStateRepository.findAll();
+        Term answeredTerm = termRepository.findById(termId);
+        List<MarkovState> possibleStatesToGoTo = findPossibleStatesToGoTo(currentState, allStates);
+        boolean found = false;
+
+        /*
+        * Make sure the reply matches the reply from given by the client
+         */
+        Reply reply = null;
+        if (actionStatus.equalsIgnoreCase("NO"))
+            reply = new Reply(Reply.NO);
+        else if (actionStatus.equalsIgnoreCase("YES"))
+            reply = new Reply(Reply.YES);
+
+        /*
+        * Search through possible states to go to and check if there are a State there that fits with the answer we got from the client
+         */
+        for (MarkovState state : possibleStatesToGoTo) {
+            MarkovAction action = findActionsThatDiffer(currentState.getMarkovActions(), state.getMarkovActions()).stream().findFirst().get();
+            if (action.getReply().equals(reply) && action.getTerm().equals(answeredTerm)) {
+                stateId = state.getId();
+                found = true;
+                System.out.println("Found a state that can start a new path!");
+            }
+        }
+
+        if (!found){
+            MarkovAction noMoreSuggestions = currentState.getMarkovActions().stream().findFirst().get().copy();
+            noMoreSuggestions.setId(999999999);
+            return noMoreSuggestions;
+        } else {
+            MarkovState newMatchingState = markovStateRepository.findById(stateId);
+            MarkovAction nextAction = findActionsThatDiffer(currentState.getMarkovActions(), newMatchingState.getMarkovActions()).stream().findFirst().get();
+            MarkovAction actionToReturn =  newMatchingState.getMarkovActions().stream()
+                    .filter(action -> action.getTerm().getId() == nextAction.getTerm().getId()).findFirst().get(); // it is the maxQValueStates maxAction that we want to return
+            System.out.println("> > > NEW PATH! Reply in returned action: " + actionToReturn.getReply());
+            return  actionToReturn;
         }
     }
 }
