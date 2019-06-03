@@ -13,4 +13,5 @@ public interface TermRepository extends PagingAndSortingRepository<Term, Long> {
 
     Term findByName(String name);
     Collection<Term> findByBroaderTerm(Term term);
+    Term findById(long id);
 }

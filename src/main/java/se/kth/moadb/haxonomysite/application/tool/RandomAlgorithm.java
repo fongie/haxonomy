@@ -30,4 +30,9 @@ public class RandomAlgorithm implements ActionChoosingAlgorithm {
       int actionId = rand.nextInt(numActions);
       return actions.get(actionId);
    }
+
+   @Override
+   public MarkovAction chooseActionFromNewPath(long stateId, String actionStatus, long termName) {
+      return null;
+   }
 }
