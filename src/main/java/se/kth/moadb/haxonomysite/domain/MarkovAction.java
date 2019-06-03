@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class MarkovAction {
     @ManyToOne
     Term term;
 
-    @JsonIgnore // TODO should this realy be ignored
+    @JoinColumn
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     MarkovState markovState;
 
@@ -28,7 +29,13 @@ public class MarkovAction {
         MarkovAction copy = new MarkovAction();
         copy.setTerm(term);
         copy.setReply(reply);
-        copy.setMarkovState(markovState);
+//        copy.setMarkovState(markovState);
         return copy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        MarkovAction other = (MarkovAction) o;
+        return this.id == other.id;
     }
 }

@@ -1,6 +1,5 @@
 package se.kth.moadb.haxonomysite.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -32,5 +31,36 @@ public class Report {
             return vuln.get();
         else
             return null;
+    }
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getBounty() {
+        return bounty;
+    }
+
+    public void setBounty(int bounty) {
+        this.bounty = bounty;
+    }
+
+    public Collection<Term> getTerms() {
+        return terms;
+    }
+
+    public void setTerms(Collection<Term> terms) {
+        this.terms = terms;
     }
 }

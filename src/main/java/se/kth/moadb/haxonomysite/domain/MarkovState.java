@@ -2,7 +2,10 @@ package se.kth.moadb.haxonomysite.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.kth.moadb.haxonomysite.repository.MarkovActionRepository;
@@ -12,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@Data
 @Entity
 public class MarkovState implements Comparable {
 
@@ -20,17 +22,14 @@ public class MarkovState implements Comparable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonIgnore // TODO should this realy be ignored
     @OneToMany(mappedBy = "markovState")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<MarkovAction> markovActions;
 
     public long getId() {
         return id;
     }
 
-//    @JsonIgnore // TODO should this realy be ignored
-//    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-//    private QValue qValue;
     private double qValue;
 
     @Override
@@ -38,8 +37,10 @@ public class MarkovState implements Comparable {
         MarkovState compare = (MarkovState)o;
         if (this.qValue > compare.qValue)
             return 1;
-        else
+        else if (this.qValue == compare.qValue)
             return 0;
+        else
+            return -1;
     }
 
     public MarkovState copy() {
@@ -51,5 +52,27 @@ public class MarkovState implements Comparable {
         newActions.stream().forEach(a -> a.setMarkovState(markovCopy));
         markovCopy.setMarkovActions(newActions);
         return markovCopy;
+    }
+
+
+    @JsonIgnore
+    public Collection<MarkovAction> getMarkovActions() {
+        return markovActions;
+    }
+
+    public void setMarkovActions(Collection<MarkovAction> markovActions) {
+        this.markovActions = markovActions;
+    }
+
+    public double getQValue() {
+        return qValue;
+    }
+
+    public void setQValue(double qValue) {
+        this.qValue = qValue;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

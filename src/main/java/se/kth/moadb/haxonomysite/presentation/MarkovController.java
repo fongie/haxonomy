@@ -29,4 +29,17 @@ public class MarkovController {
         //TODO maybe format the reports better (they are recursively returned)
        return markovStateService.getNextActionForState(stateId);
     }
+
+    @PostMapping(value = "tool/learn")
+    public String  runMachineTrainingAlgorithm(){
+        String returnMessage = "I'm feeling smarter by the millisecond. More. Mooooore!";
+        markovStateService.startTraining();
+        return returnMessage;
+    }
+
+    @GetMapping(value = "/tool/mismatch/{stateId}/{actionStatus}/{termId}")
+    public MarkovAction getActionFromNewPath(@PathVariable long stateId, @PathVariable String actionStatus, @PathVariable long termId){
+        System.out.println("RECEIVED MISMATCH: " + stateId + " " + actionStatus + " " + termId);
+        return markovStateService.getActionFromNewPath(stateId, actionStatus, termId);
+    }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -38,5 +39,16 @@ public class Term {
     public boolean hasBroaderTerm() {
         Optional<Term> t = Optional.ofNullable(broaderTerm);
         return t.isPresent();
+    }
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), id, name, time, broaderTerm, reports);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Term other = (Term) o;
+        return this.id == other.id;
     }
 }
