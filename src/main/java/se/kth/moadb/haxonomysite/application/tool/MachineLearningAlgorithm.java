@@ -55,14 +55,14 @@ public class MachineLearningAlgorithm implements ActionChoosingAlgorithm {
 
         MarkovAction selected = collection.stream()
                 .filter(markovAction -> markovAction.getTerm().equals(comparing.getTerm()))
-                .findFirst()
-                .get();
+                .findFirst().orElse(null);
 
-        System.out.println("Comparing: " + comparing.getReply() + "Selected: " + selected.getReply() + selected.getId());
-        if (comparing.getReply().equals(selected.getReply())) {
+//        System.out.println("Comparing: " + comparing.getReply() + "Selected: " + selected.getReply() + selected.getId());
+        if (selected != null)
+            if (comparing.getReply().equals(selected.getReply())) {
 //            System.out.println("Comparing reply: " + comparing.getReply().getName() + " Selected reply: " + selected.getReply().getName());
-            return true;
-        }
+                return true;
+            }
 //        System.out.println("Comparing != Selected" + " Comparing: " + comparing.getTerm().getName() + " " + comparing.getReply().getName() + " Selected: " + selected.getTerm().getName() + " " + selected.getReply().getName());
         return false;
     }
